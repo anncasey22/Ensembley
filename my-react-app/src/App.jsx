@@ -1,6 +1,10 @@
 import './App.css'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import Profile from './profile.jsx'
+import Scrolling from './scrolling.jsx'
+import Results from './results.jsx'
+import Interactions from './interactions.jsx' // <-- new import
+import Navigation from './navigation.jsx'
 
 function Home() {
   const navigate = useNavigate()
@@ -27,10 +31,17 @@ function Home() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/profile" element={<Profile />} />
-    </Routes>
+    <div>
+      <Routes>
+        <Route path="/" element={<Home />} /> {/* home route */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/scrolling" element={<Scrolling />} />
+        <Route path="/results" element={<Results />} />
+        <Route path="/interactions" element={<Interactions />} /> {/* new route */}
+        <Route path="*" element={<Profile />} /> {/* default route */}
+      </Routes>
+      <Navigation />
+    </div>
   )
 }
 
