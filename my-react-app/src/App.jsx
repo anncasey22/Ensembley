@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import Profile from './profile.jsx'
 import Scrolling from './scrolling.jsx'
 import Results from './results.jsx'
-import Interactions from './interactions.jsx' // <-- new import
+import Interactions from './interactions.jsx'
 import Navigation from './navigation.jsx'
 
 function Home() {

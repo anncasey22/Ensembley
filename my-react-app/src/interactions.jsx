@@ -7,7 +7,7 @@ const RECS_KEY = 'recommendations'
 
 function Interactions() {
   const navigate = useNavigate()
-  const [data, setData] = useState([])     // raw interactions
+  const [data, setData] = useState([])     
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
 
@@ -20,7 +20,7 @@ function Interactions() {
     }
   }, [])
 
-  // quick tallies by type/value, useful for the agent or UI
+  //quick tallies by type/value, useful for the agent or UI
   const tallies = useMemo(() => {
     const t = { genre: {}, instrument: {}, artist: {} }
     data.forEach(({ type, value }) => {
@@ -34,21 +34,109 @@ function Interactions() {
     setSending(true)
     setError('')
     try {
-      // TODO: replace with your real endpoint
-      const res = await fetch('/api/recommendations', {
+      // Create a detailed prompt based on the user's likes
+      const likedGenres = Object.keys(tallies.genre || {})
+      const likedInstruments = Object.keys(tallies.instrument || {})
+      const likedArtists = Object.keys(tallies.artist || {})
+      
+      const userPreferences = {
+        genres: Object.entries(tallies.genre || {})
+          .map(([genre, count]) => ({ name: genre, count })),
+        instruments: Object.entries(tallies.instrument || {})
+          .map(([instrument, count]) => ({ name: instrument, count })),
+        artists: Object.entries(tallies.artist || {})
+          .map(([artist, count]) => ({ name: artist, count }))
+      };
+
+      const res = await fetch('https://noggin.rea.gent/nearby-wildcat-7659', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer rg_v1_qh1ukkarsywpjfxoxjgdltb5pdj1rjz2h229_ngk'
+        },
         body: JSON.stringify({
-          interactions: data,
-          tallies,
-          // you can also include user profile fields if you want
+          prompt: `Based on the user's music preferences, suggest 3 local open mic events. The user has liked these genres: ${likedGenres.join(', ')}, these instruments: ${likedInstruments.join(', ')}, and these artists: ${likedArtists.join(', ')}. For each event, provide: 1) venue name and brief description, 2) why it matches their specific preferences (reference their liked genres/instruments/artists), 3) what kind of performances they might expect there. Make it personalized and explain the connection to their exact preferences. Format as JSON with 'events' array containing objects with 'name', 'description', and 'matchReason' fields.`
         }),
       })
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const payload = await res.json()
-
-      // stash for results page (or route state if you prefer)
+      const response = await res.text()
+      
+      let payload;
+      try {
+        // Try to parse the response as JSON
+        const jsonResponse = JSON.parse(response)
+        
+        // Handle the AI's current response format
+        if (jsonResponse.events) {
+          const convertedEvents = jsonResponse.events.map(event => ({
+            name: event.venue_name || event.name || 'Open Mic Venue',
+            description: event.description || '',
+            matchReason: event.match || event.matchReason || '',
+            expectedPerformances: event.performances || event.expectedPerformances || ''
+          }))
+          
+          payload = {
+            recommendations: { events: convertedEvents },
+            userPreferences: {
+              genres: Object.keys(tallies.genre || {}),
+              instruments: Object.keys(tallies.instrument || {}),
+              artists: Object.keys(tallies.artist || {})
+            },
+            rawInteractions: data
+          }
+        } else if (jsonResponse.openMicEvents) {
+          // Handle previous format
+          const convertedEvents = jsonResponse.openMicEvents.map(event => ({
+            name: event.venue?.name || 'Open Mic Venue',
+            description: event.venue?.description || '',
+            matchReason: event.matchReason || '',
+            expectedPerformances: event.expectedPerformances || ''
+          }))
+          
+          payload = {
+            recommendations: { events: convertedEvents },
+            userPreferences: {
+              genres: Object.keys(tallies.genre || {}),
+              instruments: Object.keys(tallies.instrument || {}),
+              artists: Object.keys(tallies.artist || {})
+            },
+            rawInteractions: data
+          }
+        } else {
+          // Fallback for other JSON formats
+          payload = {
+            recommendations: jsonResponse,
+            userPreferences: {
+              genres: Object.keys(tallies.genre || {}),
+              instruments: Object.keys(tallies.instrument || {}),
+              artists: Object.keys(tallies.artist || {})
+            },
+            rawInteractions: data
+          }
+        }
+      } catch (e) {
+        // If response isn't JSON, treat as plain text
+        payload = {
+          recommendations: {
+            events: [
+              {
+                name: "AI Generated Open Mic Recommendations",
+                description: response,
+                matchReason: `Based on your preferences: ${Object.keys(tallies.genre || {}).join(', ')} genres, ${Object.keys(tallies.instrument || {}).join(', ')} instruments, ${Object.keys(tallies.artist || {}).join(', ')} artists`
+              }
+            ]
+          },
+          userPreferences: {
+            genres: Object.keys(tallies.genre || {}),
+            instruments: Object.keys(tallies.instrument || {}),
+            artists: Object.keys(tallies.artist || {})
+          },
+          rawInteractions: data
+        }
+      }
+      
+      // Save to local storage for the results page
       localStorage.setItem(RECS_KEY, JSON.stringify(payload))
       navigate('/results')
     } catch (e) {

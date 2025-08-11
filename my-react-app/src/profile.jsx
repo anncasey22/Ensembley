@@ -3,7 +3,7 @@ import { useState } from 'react'
 function Profile() {
   const [mediaList, setMediaList] = useState([])
 
-  // Profile fields
+  //profile fields
   const [name, setName] = useState('John Smith')
   const [age, setAge] = useState('22')
   const [instrument, setInstrument] = useState('Piano')
@@ -11,7 +11,7 @@ function Profile() {
 
   const [submittedBio, setSubmittedBio] = useState(null)
 
-  // Edit mode toggle
+  //edit mode toggle
   const [isEditing, setIsEditing] = useState(false)
 
   const handleFileChange = (e) => {
@@ -36,7 +36,7 @@ function Profile() {
 
   const toggleEditMode = () => {
     if (isEditing) {
-      // Save changes when exiting edit mode
+      // save changes when exiting edit mode
       setSubmittedBio(bio)
     }
     setIsEditing(!isEditing)
