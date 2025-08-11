@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const STORAGE_KEY = 'scrolling_interactions'
-// optional: where to stash agent response for results page
 const RECS_KEY = 'recommendations'
 
 function Interactions() {
@@ -20,7 +19,7 @@ function Interactions() {
     }
   }, [])
 
-  //quick tallies by type/value, useful for the agent or UI
+  //quick tallies by type/value for the agent 
   const tallies = useMemo(() => {
     const t = { genre: {}, instrument: {}, artist: {} }
     data.forEach(({ type, value }) => {
@@ -34,7 +33,7 @@ function Interactions() {
     setSending(true)
     setError('')
     try {
-      // Create a detailed prompt based on the user's likes
+      //   prompt based on the user's likes
       const likedGenres = Object.keys(tallies.genre || {})
       const likedInstruments = Object.keys(tallies.instrument || {})
       const likedArtists = Object.keys(tallies.artist || {})
@@ -64,10 +63,10 @@ function Interactions() {
       
       let payload;
       try {
-        // Try to parse the response as JSON
+        //try to parse the response as JSON
         const jsonResponse = JSON.parse(response)
         
-        // Handle the AI's current response format
+        // handle the AI's current response format
         if (jsonResponse.events) {
           const convertedEvents = jsonResponse.events.map(event => ({
             name: event.venue_name || event.name || 'Open Mic Venue',
@@ -104,7 +103,7 @@ function Interactions() {
             rawInteractions: data
           }
         } else {
-          // Fallback for other JSON formats
+          //fallback for other JSON formats
           payload = {
             recommendations: jsonResponse,
             userPreferences: {
@@ -116,7 +115,7 @@ function Interactions() {
           }
         }
       } catch (e) {
-        // If response isn't JSON, treat as plain text
+        //if response isn't JSON, treat as plain text
         payload = {
           recommendations: {
             events: [
@@ -136,7 +135,7 @@ function Interactions() {
         }
       }
       
-      // Save to local storage for the results page
+      //save to local storage for the results page
       localStorage.setItem(RECS_KEY, JSON.stringify(payload))
       navigate('/results')
     } catch (e) {

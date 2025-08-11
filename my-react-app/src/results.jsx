@@ -24,7 +24,7 @@ function Results() {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
 
-  // Load interactions data
+  //load interactions data
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
@@ -34,7 +34,7 @@ function Results() {
     }
   }, [])
 
-  // Quick tallies by type/value
+  //quick tallies by type/value
   const tallies = useMemo(() => {
     const t = { genre: {}, instrument: {}, artist: {} }
     data.forEach(({ type, value }) => {
@@ -142,10 +142,10 @@ function Results() {
       
       let payload;
       try {
-        // Try to parse the response as JSON
+        //try to parse the response as JSON
         const jsonResponse = JSON.parse(response)
         
-        // Handle the AI's current response format
+        //handle the AI's current response format
         if (jsonResponse.events) {
           const convertedEvents = jsonResponse.events.map(event => ({
             name: event.venue_name || event.name || 'Open Mic Venue',
@@ -164,7 +164,7 @@ function Results() {
             rawInteractions: data
           }
         } else {
-          // Fallback for other JSON formats
+          //error stuff for json
           payload = {
             recommendations: jsonResponse,
             userPreferences: {
@@ -176,7 +176,7 @@ function Results() {
           }
         }
       } catch (e) {
-        // If response isn't JSON, treat as plain text
+        //if response isn't JSON, its basically j format as plain text
         payload = {
           recommendations: {
             events: [
@@ -196,7 +196,7 @@ function Results() {
         }
       }
       
-      // Save to local storage and update state
+      //save to local storage and update state
       localStorage.setItem(RECS_KEY, JSON.stringify(payload))
       setRecs(payload)
     } catch (e) {
@@ -265,7 +265,7 @@ function Results() {
             )}
           </div>
           <p style={{ marginTop: '10px', fontSize: '0.9em', color: '#666' }}>
-            Click "Get AI Recommendations" above to find open mic events that match your taste!
+            Click Get AI Recommendations above to find some events that match your taste!
           </p>
         </div>
       )}
@@ -513,7 +513,6 @@ function MapView({ events }) {
     }
 
     return () => {
-      // optional: cleanup markers
       markersRef.current.forEach(m => m.setMap(null))
       markersRef.current = []
     }
@@ -535,7 +534,7 @@ function escapeHtml(str = '') {
   return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))
 }
 
-/* inline styles for brevity */
+//styling stuff
 const card = {
   border: '1px solid #eee',
   borderRadius: 12,
