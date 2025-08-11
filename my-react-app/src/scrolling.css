@@ -1,0 +1,89 @@
+/* Main feed container */
+.scroll-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 1rem 6rem; /* space at bottom for nav bar */
+    background: #000;
+    overflow-y: auto;
+  }
+  
+  /* Each scroll item is centered */
+  .scroll-item {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Video wrapper for positioning buttons */
+  .video-container {
+    position: relative;
+    width: min(75vw, 900px);  /* most of the page width */
+    height: 80vh;             /* most of the page height */
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+  }
+  
+  /* Video fills the container */
+  .video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .video { z-index: 1; }
+  
+  .action-buttons {
+    position: absolute;        /* so it's positioned over the video */
+    right: 20px;                /* move farther right */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    z-index: 2;              /* bring above video */
+  }
+
+  .tt-chip {
+    display: flex;              /* center icon inside */
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: #fff;  
+    z-index: 10;           /* ensure React Icons are visible */
+    font-size: 20px;
+    box-shadow: 0 6px 14px rgba(0,0,0,.35);
+    border: 2px solid rgba(255,255,255,.55);
+    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.15), rgba(20,20,20,.65));
+  }
+
+  .tt-chip-wrapper span {
+    font-size: 10px;
+    line-height: 1.1;
+    margin-top: 4px;
+    color: #fff;
+    opacity: 0.9;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+  
+
+
+  
+  @media (max-width: 480px) {
+    .action-buttons { right: 2px; gap: 12px; }
+    .tt-chip { width: 40px; height: 40px; font-size: 18px; }
+    .tt-chip-wrapper span { font-size: 9px; }
+  }  
+  
+  .tt-chip:hover {
+    transform: scale(1.06);
+  }
+  
+  .tt-chip.active {
+    background: rgba(76, 110, 245, 0.85);
+  }
+  

@@ -1,4 +1,5 @@
 // src/results.jsx
+import './scrolling.css'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const RECS_KEY = 'recommendations'

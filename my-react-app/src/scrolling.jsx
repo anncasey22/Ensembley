@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import { FaMusic, FaGuitar, FaUser } from 'react-icons/fa'
+import './scrolling.css'
 
 const STORAGE_KEY = 'scrolling_interactions'
 
@@ -96,19 +98,29 @@ function Scrolling() {
                 preload="metadata"
               />
               <div className="action-buttons">
-                <button
-                  className={`tt-chip ${likedMap[gKey] ? 'active' : ''}`}
-                  onClick={() => record('genre', item.genre, item.id)}
-                >🎵</button>
-                <button
-                  className={`tt-chip ${likedMap[iKey] ? 'active' : ''}`}
-                  onClick={() => record('instrument', item.instrument, item.id)}
-                >🎸</button>
-                <button
-                  className={`tt-chip ${likedMap[aKey] ? 'active' : ''}`}
-                  onClick={() => record('artist', item.artist, item.id)}
-                >👤</button>
-              </div>
+  <div className="tt-chip-wrapper">
+    <button
+      className={`tt-chip ${likedMap[gKey] ? 'active' : ''}`}
+      onClick={() => record('genre', item.genre, item.id)}
+    ><FaMusic size={22} /></button>
+    <span>Genre</span>
+  </div>
+  <div className="tt-chip-wrapper">
+    <button
+      className={`tt-chip ${likedMap[iKey] ? 'active' : ''}`}
+      onClick={() => record('instrument', item.instrument, item.id)}
+    ><FaGuitar size={22} /></button>
+    <span>Instrument</span>
+  </div>
+  <div className="tt-chip-wrapper">
+    <button
+      className={`tt-chip ${likedMap[aKey] ? 'active' : ''}`}
+      onClick={() => record('artist', item.artist, item.id)}
+    ><FaUser size={22} /></button>
+    <span>User</span>
+  </div>
+</div>
+
             </div>
           </div>
         )
