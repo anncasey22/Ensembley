@@ -1,0 +1,99 @@
+/* Main container */
+.results-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f7b7e9 0%, #a0c4ff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Header */
+.results-header h1 {
+  font-family: 'Pacifico', 'Montserrat', cursive, sans-serif;
+  font-size: 2.8rem;
+  color: #4c6ef5;
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+  text-shadow: 1px 2px 8px #fff3;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Results content card */
+.results-content {
+  background: rgba(255,255,255,0.85);
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(76,110,245,0.10);
+  padding: 2rem;
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Results list */
+.results-list {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.result-card {
+  background: #f0f4ff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(76,110,245,0.10);
+  padding: 1rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  font-family: 'Inter', 'Montserrat', sans-serif;
+}
+
+.result-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #4c6ef5;
+  font-family: 'Montserrat', 'Pacifico', cursive, sans-serif;
+  font-size: 1.2rem;
+}
+
+.result-details {
+  font-size: 1.1rem;
+  color: #333;
+  font-family: 'Inter', 'Montserrat', sans-serif;
+}
+
+.result-value {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  color: #222;
+  font-size: 1.1rem;
+}
+
+/* Buttons */
+.primary-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  background: linear-gradient(90deg, #4c6ef5 60%, #f7b7e9 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  box-shadow: 0 2px 8px rgba(76,110,245,0.10);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.primary-button:hover {
+  background: linear-gradient(90deg, #3b5bdb 60%, #a0c4ff 100%);
+  transform: scale(1.05);
+}

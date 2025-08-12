@@ -1,17 +1,13 @@
 import { useState } from 'react'
+import './profile.css'
 
 function Profile() {
   const [mediaList, setMediaList] = useState([])
-
-  //profile fields
   const [name, setName] = useState('John Smith')
   const [age, setAge] = useState('22')
   const [instrument, setInstrument] = useState('Piano')
   const [bio, setBio] = useState('')
-
   const [submittedBio, setSubmittedBio] = useState(null)
-
-  //edit mode toggle
   const [isEditing, setIsEditing] = useState(false)
 
   const handleFileChange = (e) => {
@@ -25,7 +21,6 @@ function Profile() {
         : null,
       name: file.name,
     })).filter((item) => item.type !== null)
-
     setMediaList((prev) => [...prev, ...updatedMedia])
   }
 
@@ -36,104 +31,106 @@ function Profile() {
 
   const toggleEditMode = () => {
     if (isEditing) {
-      // save changes when exiting edit mode
       setSubmittedBio(bio)
     }
     setIsEditing(!isEditing)
   }
 
   return (
-    <div className="app-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="profile-container">
+      <div className="profile-header">
         <h1>Your Profile</h1>
         <button className="primary-button" onClick={toggleEditMode}>
           {isEditing ? 'Save' : 'Edit'}
         </button>
       </div>
 
-      {/* Editable fields */}
-      <div style={{ marginTop: '1rem' }}>
-        <p>
-          <strong>Name:</strong>{' '}
-          {isEditing ? (
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          ) : (
-            name
-          )}
-        </p>
-        <p>
-          <strong>Age:</strong>{' '}
-          {isEditing ? (
-            <input
-              type="text"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-            />
-          ) : (
-            age
-          )}
-        </p>
-        <p>
-          <strong>Instrument:</strong>{' '}
-          {isEditing ? (
-            <input
-              type="text"
-              value={instrument}
-              onChange={(e) => setInstrument(e.target.value)}
-            />
-          ) : (
-            instrument
-          )}
-        </p>
-
-        <p><strong>Bio:</strong></p>
-        {isEditing ? (
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={4}
-            cols={50}
-            placeholder="Tell us about yourself..."
-            style={{ width: '100%', marginBottom: '1rem' }}
-          />
-        ) : (
-          <p style={{ fontStyle: 'italic' }}>{submittedBio || 'No bio yet.'}</p>
-        )}
-      </div>
-
-      {/* File upload section */}
-      <p style={{ marginTop: '2rem' }}>Upload videos or images:</p>
-      <input
-        type="file"
-        accept="image/*,video/*"
-        multiple
-        onChange={handleFileChange}
-      />
-
-      {/* Media Preview */}
-      <div className="media-preview" style={{ marginTop: '2rem' }}>
-        {mediaList.map((media, index) => (
-          <div key={index} style={{ marginBottom: '1.5rem' }}>
-            <p style={{ fontWeight: 'bold' }}>{media.name}</p>
-            {media.type === 'image' && (
-              <img
-                src={media.url}
-                alt={`Uploaded ${index}`}
-                style={{ maxWidth: '100%', maxHeight: '400px' }}
+      <div className="profile-content">
+        <div className="profile-fields">
+          <p>
+            <strong>Name:</strong>{' '}
+            {isEditing ? (
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="profile-input"
               />
+            ) : (
+              <span className="profile-value">{name}</span>
             )}
-            {media.type === 'video' && (
-              <video controls style={{ maxWidth: '100%', maxHeight: '400px' }}>
-                <source src={media.url} />
-                Your browser does not support the video tag.
-              </video>
+          </p>
+          <p>
+            <strong>Age:</strong>{' '}
+            {isEditing ? (
+              <input
+                type="text"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                className="profile-input"
+              />
+            ) : (
+              <span className="profile-value">{age}</span>
             )}
-          </div>
-        ))}
+          </p>
+          <p>
+            <strong>Instrument:</strong>{' '}
+            {isEditing ? (
+              <input
+                type="text"
+                value={instrument}
+                onChange={(e) => setInstrument(e.target.value)}
+                className="profile-input"
+              />
+            ) : (
+              <span className="profile-value">{instrument}</span>
+            )}
+          </p>
+          <p><strong>Bio:</strong></p>
+          {isEditing ? (
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={4}
+              className="profile-textarea"
+              placeholder="Tell us about yourself..."
+            />
+          ) : (
+            <p className="profile-bio">{submittedBio || 'No bio yet.'}</p>
+          )}
+        </div>
+
+        <div className="profile-upload">
+          <p>Upload videos or images:</p>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            onChange={handleFileChange}
+            className="profile-file-input"
+          />
+        </div>
+
+        <div className="media-preview">
+          {mediaList.map((media, index) => (
+            <div key={index} className="media-card">
+              <p className="media-name">{media.name}</p>
+              {media.type === 'image' && (
+                <img
+                  src={media.url}
+                  alt={`Uploaded ${index}`}
+                  className="media-img"
+                />
+              )}
+              {media.type === 'video' && (
+                <video controls className="media-video">
+                  <source src={media.url} />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

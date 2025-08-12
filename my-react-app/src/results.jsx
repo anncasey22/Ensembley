@@ -1,22 +1,9 @@
-// src/results.jsx
+import './results.css'
 import './scrolling.css'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const RECS_KEY = 'recommendations'
 const STORAGE_KEY = 'scrolling_interactions'
-
-/**
- * expected json shape (array of 3+ items):
- * [
- *  {
- *    "name": "Cafe Blue Open Mic",
- *    "location": { "lat": 37.8715, "lng": -122.2730, "address": "2420 Shattuck Ave, Berkeley, CA" },
- *    "why": "you like guitar + jazz, this spot hosts live jazz guitar sets…",
- *    "people": ["Ava Martinez", "Noah Kim", "Lia Chen"]
- *  },
- *  ...
- * ]
- */
 
 function Results() {
   const [recs, setRecs] = useState({ recommendations: { events: [] }, userPreferences: {} })
@@ -213,180 +200,106 @@ function Results() {
   }
 
   return (
-    <div className="app-container" style={{ paddingBottom: '5rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-        <h1 style={{ color: '#333' }}>Your Personalized Recommendations</h1>
-        <div style={{ display: 'flex', gap: 8 }}>
+    <div className="results-container">
+      <div className="results-header">
+        <h1>Your Personalized Recommendations</h1>
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: '1rem' }}>
           <button 
             className="primary-button" 
             disabled={!data.length || sending} 
             onClick={sendToAgent}
-            style={{ fontSize: '0.9em' }}
           >
             {sending ? 'Getting recommendations...' : 'Get AI Recommendations'}
           </button>
-          <button onClick={clear} disabled={!recs.recommendations.events.length}>
-            clear
+          <button className="primary-button" style={{ background: '#eee', color: '#333' }} onClick={clear} disabled={!recs.recommendations.events.length}>
+            Clear
           </button>
         </div>
       </div>
 
       {error && <p style={{ color: '#d32f2f', marginTop: '1rem', background: 'white', padding: '10px', borderRadius: '4px' }}>{error}</p>}
 
-      {/* Show current preferences summary */}
       {data.length > 0 && (
-        <div style={{ 
-          background: 'white', 
-          padding: '15px', 
-          borderRadius: '8px', 
-          marginTop: '20px',
-          marginBottom: '20px',
-          border: '1px solid #ccc',
-          color: '#333'
-        }}>
-          <h3 style={{ marginBottom: '10px', color: '#1a73e8' }}>Your Current Preferences:</h3>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        <div className="results-content">
+          <h3 className="result-title">Your Current Preferences:</h3>
+          <div className="results-list" style={{ flexDirection: 'row', gap: '2rem', marginBottom: '1rem' }}>
             {Object.keys(tallies.genre || {}).length > 0 && (
               <div>
-                <strong style={{ color: '#333' }}>Genres:</strong> 
-                <span style={{ color: '#555' }}> {Object.keys(tallies.genre).join(', ')}</span>
+                <strong>Genres:</strong> 
+                <span className="result-value"> {Object.keys(tallies.genre).join(', ')}</span>
               </div>
             )}
             {Object.keys(tallies.instrument || {}).length > 0 && (
               <div>
-                <strong style={{ color: '#333' }}>Instruments:</strong>
-                <span style={{ color: '#555' }}> {Object.keys(tallies.instrument).join(', ')}</span>
+                <strong>Instruments:</strong>
+                <span className="result-value"> {Object.keys(tallies.instrument).join(', ')}</span>
               </div>
             )}
             {Object.keys(tallies.artist || {}).length > 0 && (
               <div>
-                <strong style={{ color: '#333' }}>Artists:</strong>
-                <span style={{ color: '#555' }}> {Object.keys(tallies.artist).join(', ')}</span>
+                <strong>Artists:</strong>
+                <span className="result-value"> {Object.keys(tallies.artist).join(', ')}</span>
               </div>
             )}
           </div>
-          <p style={{ marginTop: '10px', fontSize: '0.9em', color: '#666' }}>
+          <p className="result-details" style={{ marginTop: '10px' }}>
             Click Get AI Recommendations above to find some events that match your taste!
           </p>
         </div>
       )}
 
-      {/* Show user preferences that led to recommendations */}
       {recs.recommendations.events.length > 0 && (
-        <div style={{ 
-          background: 'white', 
-          padding: '15px', 
-          borderRadius: '8px', 
-          marginTop: '20px',
-          marginBottom: '20px',
-          border: '1px solid #ccc'
-        }}>
-          <h3 style={{ color: '#1a73e8', marginBottom: '10px' }}>Based on Your Likes:</h3>
-          <div style={{ display: 'flex', gap: '20px', marginTop: '10px' }}>
+        <div className="results-content">
+          <h3 className="result-title">Based on Your Likes:</h3>
+          <div className="results-list" style={{ flexDirection: 'row', gap: '2rem', marginBottom: '1rem' }}>
             {recs.userPreferences.genres?.length > 0 && (
               <div>
-                <strong style={{ color: '#333' }}>Genres:</strong>
-                <span style={{ color: '#555' }}> {recs.userPreferences.genres.join(', ')}</span>
+                <strong>Genres:</strong>
+                <span className="result-value"> {recs.userPreferences.genres.join(', ')}</span>
               </div>
             )}
             {recs.userPreferences.instruments?.length > 0 && (
               <div>
-                <strong style={{ color: '#333' }}>Instruments:</strong>
-                <span style={{ color: '#555' }}> {recs.userPreferences.instruments.join(', ')}</span>
+                <strong>Instruments:</strong>
+                <span className="result-value"> {recs.userPreferences.instruments.join(', ')}</span>
               </div>
             )}
             {recs.userPreferences.artists?.length > 0 && (
               <div>
-                <strong style={{ color: '#333' }}>Artists:</strong>
-                <span style={{ color: '#555' }}> {recs.userPreferences.artists.join(', ')}</span>
+                <strong>Artists:</strong>
+                <span className="result-value"> {recs.userPreferences.artists.join(', ')}</span>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Display AI recommendations */}
       {recs.recommendations.events.length > 0 && (
-        <div>
+        <div className="results-list">
           {recs.recommendations.events.map((event, index) => (
-            <div key={index} style={{
-              background: 'white',
-              padding: '25px',
-              borderRadius: '12px',
-              marginBottom: '20px',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-              border: '1px solid #e1e5e9'
-            }}>
-              <h3 style={{ 
-                color: '#1a73e8', 
-                marginBottom: '12px',
-                fontSize: '1.4em',
-                fontWeight: '600'
-              }}>
-                🎤 {event.name}
-              </h3>
-              
+            <div key={index} className="result-card">
+              <div className="result-title">🎤 {event.name}</div>
               {event.description && (
-                <div style={{
-                  background: '#f8f9fa',
-                  padding: '15px',
-                  borderRadius: '8px',
-                  marginBottom: '15px',
-                  border: '1px solid #e9ecef'
-                }}>
-                  <p style={{ 
-                    fontSize: '1.1em', 
-                    marginBottom: '0',
-                    color: '#495057'
-                  }}>
-                    {event.description}
-                  </p>
+                <div className="result-details" style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px', marginBottom: '15px', border: '1px solid #e9ecef' }}>
+                  <p>{event.description}</p>
                 </div>
               )}
-              
               {event.matchReason && (
-                <div style={{
-                  background: '#e8f5e8',
-                  padding: '15px',
-                  borderRadius: '8px',
-                  marginBottom: '15px',
-                  border: '1px solid #c3e6c3'
-                }}>
-                  <h4 style={{ 
-                    color: '#2d5a2d',
-                    marginBottom: '8px',
-                    fontSize: '1.1em'
-                  }}>
+                <div className="result-details" style={{ background: '#e8f5e8', padding: '15px', borderRadius: '8px', marginBottom: '15px', border: '1px solid #c3e6c3' }}>
+                  <h4 style={{ color: '#2d5a2d', marginBottom: '8px', fontSize: '1.1em' }}>
                     🎯 Why this matches you:
                   </h4>
-                  <p style={{ 
-                    color: '#2d5a2d', 
-                    marginBottom: '0',
-                    fontStyle: 'italic'
-                  }}>
+                  <p style={{ color: '#2d5a2d', marginBottom: '0', fontStyle: 'italic' }}>
                     {event.matchReason}
                   </p>
                 </div>
               )}
-              
               {event.expectedPerformances && (
-                <div style={{
-                  background: '#fff3cd',
-                  padding: '15px',
-                  borderRadius: '8px',
-                  border: '1px solid #ffeaa7'
-                }}>
-                  <h4 style={{ 
-                    color: '#856404',
-                    marginBottom: '8px',
-                    fontSize: '1.1em'
-                  }}>
+                <div className="result-details" style={{ background: '#fff3cd', padding: '15px', borderRadius: '8px', border: '1px solid #ffeaa7' }}>
+                  <h4 style={{ color: '#856404', marginBottom: '8px', fontSize: '1.1em' }}>
                     🎵 What to expect:
                   </h4>
-                  <p style={{ 
-                    color: '#856404', 
-                    marginBottom: '0'
-                  }}>
+                  <p style={{ color: '#856404', marginBottom: '0' }}>
                     {event.expectedPerformances}
                   </p>
                 </div>
@@ -397,8 +310,8 @@ function Results() {
       )}
 
       {!recs.recommendations.events.length && (
-        <div style={{ marginTop: 12 }}>
-          <p>paste your ai agent json:</p>
+        <div className="results-content">
+          <p>Paste your AI agent JSON:</p>
           <textarea
             value={paste}
             onChange={(e) => setPaste(e.target.value)}
@@ -407,40 +320,9 @@ function Results() {
             placeholder='[{"name":"...", "location":{"lat":..,"lng":..,"address":"..."},"why":"...","people":["..."]}]'
           />
           <div style={{ marginTop: 8 }}>
-            <button className="primary-button" onClick={loadPaste}>load json</button>
+            <button className="primary-button" onClick={loadPaste}>Load JSON</button>
           </div>
         </div>
-      )}
-
-      {recs.length > 0 && view === 'list' && (
-        <ul style={{ listStyle: 'none', padding: 0, marginTop: 16 }}>
-          {recs.map((r, i) => (
-            <li key={i} className="result-card" style={card}>
-              <div className="result-name" style={nameStyle}>{r.name || 'open mic'}</div>
-              <div className="result-meta" style={meta}>
-                {r?.location?.address && <span>{r.location.address}</span>}
-                {r?.location?.lat != null && r?.location?.lng != null && (
-                  <span>· ({r.location.lat.toFixed(4)}, {r.location.lng.toFixed(4)})</span>
-                )}
-              </div>
-
-              {r.why && <p style={{ margin: '0.25rem 0 0.5rem' }}>{r.why}</p>}
-
-              {Array.isArray(r.people) && r.people.length > 0 && (
-                <div style={{ marginTop: 8 }}>
-                  <div style={{ fontWeight: 600, marginBottom: 6 }}>people attending</div>
-                  <ul style={{ margin: 0, paddingLeft: 18 }}>
-                    {r.people.map((p, idx) => (<li key={idx}>{p}</li>))}
-                  </ul>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {recs.length > 0 && view === 'map' && (
-        <MapView events={validWithCoords} />
       )}
     </div>
   )
@@ -520,11 +402,11 @@ function MapView({ events }) {
   }, [events])
 
   return (
-    <div style={mapWrap}>
+    <div className="result-map">
       {events.length === 0 ? (
-        <p style={{ color: '#555' }}>no mappable events (missing lat/lng)</p>
+        <p className="result-details">no mappable events (missing lat/lng)</p>
       ) : (
-        <div ref={mapRef} style={mapEl} />
+        <div ref={mapRef} style={{ width: '100%', height: '70vh', borderRadius: '12px', overflow: 'hidden', border: '1px solid #eee' }} />
       )}
     </div>
   )
@@ -534,19 +416,5 @@ function MapView({ events }) {
 function escapeHtml(str = '') {
   return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))
 }
-
-//styling stuff
-const card = {
-  border: '1px solid #eee',
-  borderRadius: 12,
-  padding: '0.9rem 1rem',
-  marginBottom: '0.8rem',
-  background: '#fff',
-  boxShadow: '0 1px 6px rgba(0,0,0,0.04)',
-}
-const nameStyle = { fontWeight: 700, fontSize: '1.05rem', marginBottom: 4 }
-const meta = { display: 'flex', gap: 8, flexWrap: 'wrap', color: '#555', marginBottom: 6 }
-const mapWrap = { marginTop: 12, height: '70vh', borderRadius: 12, overflow: 'hidden', border: '1px solid #eee' }
-const mapEl = { width: '100%', height: '100%' }
 
 export default Results
