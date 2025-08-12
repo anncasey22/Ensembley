@@ -8,7 +8,11 @@
   justify-content: flex-start;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   padding: 1rem;
+  padding-bottom: 8rem; /* Extra padding for navigation */
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -38,7 +42,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 6rem; /* Space for bottom navigation */
+  margin-bottom: 2rem; /* Extra space for navigation */
+  position: relative;
+  z-index: 2;
 }
 
 /* Results list */

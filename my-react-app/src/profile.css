@@ -9,9 +9,10 @@
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   padding: 1rem;
   box-sizing: border-box;
-  width: 100%;
+  width: 100vw;
   margin: 0;
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -37,9 +38,8 @@
 
 /* Profile content card */
 .profile-content {
-  background: rgba(255,255,255,0.85);
+  background: transparent;
   border-radius: 18px;
-  box-shadow: 0 6px 24px rgba(76,110,245,0.10);
   padding: 1rem;
   width: 100%;
   max-width: 100%;
@@ -53,6 +53,7 @@
 .profile-fields {
   width: 100%;
   max-width: 500px;
+  box-sizing: border-box;
 }
 
 .profile-fields p {
@@ -122,7 +123,7 @@
 }
 
 .media-card {
-  background: #f0f4ff;
+  background: rgba(240, 244, 255, 0.3);
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(76,110,245,0.10);
   padding: 1rem;
@@ -177,32 +178,47 @@
 @media (max-width: 768px) {
   .profile-container {
     padding: 0.5rem;
+    width: 100vw;
   }
   
   .profile-content {
     padding: 1rem;
     border-radius: 12px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .profile-header {
     margin-bottom: 0.5rem;
+    width: 100%;
   }
   
   .media-card {
     padding: 0.75rem;
+  }
+  
+  .profile-fields {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .profile-container {
     padding: 0.25rem;
+    width: 100vw;
   }
   
   .profile-content {
     padding: 0.75rem;
+    width: 100%;
   }
   
   .profile-fields p {
     margin: 0.75rem 0;
+  }
+  
+  .profile-fields {
+    width: 100%;
   }
 }
