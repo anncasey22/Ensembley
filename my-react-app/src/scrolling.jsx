@@ -80,6 +80,9 @@ function Scrolling() {
 
   return (
     <div className="scroll-feed">
+      <div className="app-header">
+        <h1 className="app-name">Ensembley</h1>
+      </div>
       {FEED.map(item => {
         const gKey = `${item.id}:genre`
         const iKey = `${item.id}:instrument`
