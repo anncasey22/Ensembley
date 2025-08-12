@@ -1,9 +1,22 @@
+// src/results.jsx
+import { useEffect, useMemo, useState } from 'react'
 import './results.css'
-import './scrolling.css'
-import { useEffect, useMemo, useRef, useState } from 'react'
 
 const RECS_KEY = 'recommendations'
 const STORAGE_KEY = 'scrolling_interactions'
+
+/**
+ * expected json shape (array of 3+ items):
+ * [
+ *  {
+ *    "name": "Cafe Blue Open Mic",
+ *    "location": { "lat": 37.8715, "lng": -122.2730, "address": "2420 Shattuck Ave, Berkeley, CA" },
+ *    "why": "you like guitar + jazz, this spot hosts live jazz guitar sets…",
+ *    "people": ["Ava Martinez", "Noah Kim", "Lia Chen"]
+ *  },
+ *  ...
+ * ]
+ */
 
 function Results() {
   const [recs, setRecs] = useState({ recommendations: { events: [] }, userPreferences: {} })
@@ -55,7 +68,8 @@ function Results() {
             name: event.venue_name || event.name || 'Open Mic Venue',
             description: event.description || '',
             matchReason: event.match || event.matchReason || '',
-            expectedPerformances: event.performances || event.expectedPerformances || ''
+            expectedPerformances: event.performances || event.expectedPerformances || '',
+            peopleWillAttend: event['people will attend'] || event.peopleWillAttend || ''
           }))
           setRecs({ 
             recommendations: { events: convertedEvents }, 
@@ -91,8 +105,29 @@ function Results() {
   const loadPaste = () => {
     try {
       const parsed = JSON.parse(paste)
-      localStorage.setItem(RECS_KEY, JSON.stringify(parsed))
-      setRecs(parsed)
+      
+      // Handle direct AI response format
+      let formattedData;
+      if (parsed.events) {
+        // Convert AI format to our internal format
+        const convertedEvents = parsed.events.map(event => ({
+          name: event.venue_name || event.name || 'Open Mic Venue',
+          description: event.description || '',
+          matchReason: event.match || event.matchReason || '',
+          expectedPerformances: event.performances || event.expectedPerformances || '',
+          peopleWillAttend: event['people will attend'] || event.peopleWillAttend || ''
+        }))
+        
+        formattedData = {
+          recommendations: { events: convertedEvents },
+          userPreferences: { genres: [], instruments: [], artists: [] }
+        }
+      } else {
+        formattedData = parsed
+      }
+      
+      localStorage.setItem(RECS_KEY, JSON.stringify(formattedData))
+      setRecs(formattedData)
       setPaste('')
     } catch {
       alert('invalid json')
@@ -121,7 +156,13 @@ function Results() {
           'Authorization': 'Bearer rg_v1_qh1ukkarsywpjfxoxjgdltb5pdj1rjz2h229_ngk'
         },
         body: JSON.stringify({
-          prompt: `Based on the user's music preferences, suggest 3 local open mic events. The user has liked these genres: ${likedGenres.join(', ')}, these instruments: ${likedInstruments.join(', ')}, and these artists: ${likedArtists.join(', ')}. For each event, provide: 1) venue name and brief description, 2) why it matches their specific preferences (reference their liked genres/instruments/artists), 3) what kind of performances they might expect there. Make it personalized and explain the connection to their exact preferences.`
+          prompt: `Below is the prompt which included the user genre, instrument, and artist likes. 
+          Based on their likes match it: The user has liked these genres: ${likedGenres.join(', ')}, 
+          these instruments: ${likedInstruments.join(', ')}, and these artists: ${likedArtists.join(', ')}. 
+          For each event, provide: 1) venue name and brief description, 2) why it matches their specific 
+          preferences (reference their liked genres/instruments/artists), 3) what kind of performances they
+           might expect there, 4) which people from the list would likely attend this event based on their 
+           musical interests. Make it personalized and explain the connection to their exact preferences.`
         }),
       })
 
@@ -131,7 +172,16 @@ function Results() {
       let payload;
       try {
         //try to parse the response as JSON
-        const jsonResponse = JSON.parse(response)
+        let jsonText = response.trim()
+        
+        // Remove markdown code blocks if present
+        if (jsonText.startsWith('```json')) {
+          jsonText = jsonText.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+        } else if (jsonText.startsWith('```')) {
+          jsonText = jsonText.replace(/^```\s*/, '').replace(/\s*```$/, '')
+        }
+        
+        const jsonResponse = JSON.parse(jsonText)
         
         //handle the AI's current response format
         if (jsonResponse.events) {
@@ -139,7 +189,8 @@ function Results() {
             name: event.venue_name || event.name || 'Open Mic Venue',
             description: event.description || '',
             matchReason: event.match || event.matchReason || '',
-            expectedPerformances: event.performances || event.expectedPerformances || ''
+            expectedPerformances: event.performances || event.expectedPerformances || '',
+            peopleWillAttend: event['people will attend'] || event.peopleWillAttend || ''
           }))
           
           payload = {
@@ -164,6 +215,8 @@ function Results() {
           }
         }
       } catch (e) {
+        console.error('Failed to parse AI response:', e)
+        console.log('Raw AI response:', response)
         //if response isn't JSON, its basically j format as plain text
         payload = {
           recommendations: {
@@ -202,106 +255,221 @@ function Results() {
   return (
     <div className="results-container">
       <div className="results-header">
-        <h1>Your Personalized Recommendations</h1>
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: '1rem' }}>
+        <h1 style={{ color: '#333' }}>Your Personalized Recommendations</h1>
+      </div>
+      <div className="results-content">
+        <div className="button-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', width: '100%', marginBottom: '1rem' }}>
           <button 
             className="primary-button" 
             disabled={!data.length || sending} 
             onClick={sendToAgent}
+            style={{ fontSize: '0.9em' }}
           >
             {sending ? 'Getting recommendations...' : 'Get AI Recommendations'}
           </button>
-          <button className="primary-button" style={{ background: '#eee', color: '#333' }} onClick={clear} disabled={!recs.recommendations.events.length}>
+          <button className="primary-button" onClick={clear} disabled={!recs.recommendations.events.length}>
             Clear
           </button>
         </div>
-      </div>
 
       {error && <p style={{ color: '#d32f2f', marginTop: '1rem', background: 'white', padding: '10px', borderRadius: '4px' }}>{error}</p>}
 
+      {/* Show current preferences summary */}
       {data.length > 0 && (
-        <div className="results-content">
-          <h3 className="result-title">Your Current Preferences:</h3>
-          <div className="results-list" style={{ flexDirection: 'row', gap: '2rem', marginBottom: '1rem' }}>
+        <div style={{ 
+          background: 'white', 
+          padding: '15px', 
+          borderRadius: '8px', 
+          marginTop: '20px',
+          marginBottom: '20px',
+          border: '1px solid #ccc',
+          color: '#333'
+        }}>
+          <h3 style={{ marginBottom: '10px', color: '#1a73e8' }}>Your Current Preferences:</h3>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             {Object.keys(tallies.genre || {}).length > 0 && (
               <div>
-                <strong>Genres:</strong> 
-                <span className="result-value"> {Object.keys(tallies.genre).join(', ')}</span>
+                <strong style={{ color: '#333' }}>Genres:</strong> 
+                <span style={{ color: '#555' }}> {Object.keys(tallies.genre).join(', ')}</span>
               </div>
             )}
             {Object.keys(tallies.instrument || {}).length > 0 && (
               <div>
-                <strong>Instruments:</strong>
-                <span className="result-value"> {Object.keys(tallies.instrument).join(', ')}</span>
+                <strong style={{ color: '#333' }}>Instruments:</strong>
+                <span style={{ color: '#555' }}> {Object.keys(tallies.instrument).join(', ')}</span>
               </div>
             )}
             {Object.keys(tallies.artist || {}).length > 0 && (
               <div>
-                <strong>Artists:</strong>
-                <span className="result-value"> {Object.keys(tallies.artist).join(', ')}</span>
+                <strong style={{ color: '#333' }}>Artists:</strong>
+                <span style={{ color: '#555' }}> {Object.keys(tallies.artist).join(', ')}</span>
               </div>
             )}
           </div>
-          <p className="result-details" style={{ marginTop: '10px' }}>
+          <p style={{ marginTop: '10px', fontSize: '0.9em', color: '#666' }}>
             Click Get AI Recommendations above to find some events that match your taste!
           </p>
         </div>
       )}
 
+      {/* Show user preferences that led to recommendations */}
       {recs.recommendations.events.length > 0 && (
-        <div className="results-content">
-          <h3 className="result-title">Based on Your Likes:</h3>
-          <div className="results-list" style={{ flexDirection: 'row', gap: '2rem', marginBottom: '1rem' }}>
+        <div style={{ 
+          background: 'white', 
+          padding: '15px', 
+          borderRadius: '8px', 
+          marginTop: '20px',
+          marginBottom: '20px',
+          border: '1px solid #ccc'
+        }}>
+          <h3 style={{ color: '#1a73e8', marginBottom: '10px' }}>Based on Your Likes:</h3>
+          <div style={{ display: 'flex', gap: '20px', marginTop: '10px' }}>
             {recs.userPreferences.genres?.length > 0 && (
               <div>
-                <strong>Genres:</strong>
-                <span className="result-value"> {recs.userPreferences.genres.join(', ')}</span>
+                <strong style={{ color: '#333' }}>Genres:</strong>
+                <span style={{ color: '#555' }}> {recs.userPreferences.genres.join(', ')}</span>
               </div>
             )}
             {recs.userPreferences.instruments?.length > 0 && (
               <div>
-                <strong>Instruments:</strong>
-                <span className="result-value"> {recs.userPreferences.instruments.join(', ')}</span>
+                <strong style={{ color: '#333' }}>Instruments:</strong>
+                <span style={{ color: '#555' }}> {recs.userPreferences.instruments.join(', ')}</span>
               </div>
             )}
             {recs.userPreferences.artists?.length > 0 && (
               <div>
-                <strong>Artists:</strong>
-                <span className="result-value"> {recs.userPreferences.artists.join(', ')}</span>
+                <strong style={{ color: '#333' }}>Artists:</strong>
+                <span style={{ color: '#555' }}> {recs.userPreferences.artists.join(', ')}</span>
               </div>
             )}
           </div>
         </div>
       )}
 
+      {/* Display AI recommendations */}
       {recs.recommendations.events.length > 0 && (
-        <div className="results-list">
+        <div>
           {recs.recommendations.events.map((event, index) => (
-            <div key={index} className="result-card">
-              <div className="result-title">🎤 {event.name}</div>
+            <div key={index} style={{
+              background: 'white',
+              padding: '25px',
+              borderRadius: '12px',
+              marginBottom: '20px',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              border: '1px solid #e1e5e9'
+            }}>
+              <h3 style={{ 
+                color: '#1a73e8', 
+                marginBottom: '12px',
+                fontSize: '1.4em',
+                fontWeight: '600'
+              }}>
+                🎤 {event.name}
+              </h3>
+              
               {event.description && (
-                <div className="result-details" style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px', marginBottom: '15px', border: '1px solid #e9ecef' }}>
-                  <p>{event.description}</p>
+                <div style={{
+                  background: '#f8f9fa',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  marginBottom: '15px',
+                  border: '1px solid #e9ecef'
+                }}>
+                  <p style={{ 
+                    fontSize: '1.1em', 
+                    marginBottom: '0',
+                    color: '#495057'
+                  }}>
+                    {event.description}
+                  </p>
                 </div>
               )}
+              
               {event.matchReason && (
-                <div className="result-details" style={{ background: '#e8f5e8', padding: '15px', borderRadius: '8px', marginBottom: '15px', border: '1px solid #c3e6c3' }}>
-                  <h4 style={{ color: '#2d5a2d', marginBottom: '8px', fontSize: '1.1em' }}>
+                <div style={{
+                  background: '#e8f5e8',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  marginBottom: '15px',
+                  border: '1px solid #c3e6c3'
+                }}>
+                  <h4 style={{ 
+                    color: '#2d5a2d',
+                    marginBottom: '8px',
+                    fontSize: '1.1em'
+                  }}>
                     🎯 Why this matches you:
                   </h4>
-                  <p style={{ color: '#2d5a2d', marginBottom: '0', fontStyle: 'italic' }}>
+                  <p style={{ 
+                    color: '#2d5a2d', 
+                    marginBottom: '0',
+                    fontStyle: 'italic'
+                  }}>
                     {event.matchReason}
                   </p>
                 </div>
               )}
+              
               {event.expectedPerformances && (
-                <div className="result-details" style={{ background: '#fff3cd', padding: '15px', borderRadius: '8px', border: '1px solid #ffeaa7' }}>
-                  <h4 style={{ color: '#856404', marginBottom: '8px', fontSize: '1.1em' }}>
+                <div style={{
+                  background: '#fff3cd',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  marginBottom: '15px',
+                  border: '1px solid #ffeaa7'
+                }}>
+                  <h4 style={{ 
+                    color: '#856404',
+                    marginBottom: '8px',
+                    fontSize: '1.1em'
+                  }}>
                     🎵 What to expect:
                   </h4>
-                  <p style={{ color: '#856404', marginBottom: '0' }}>
+                  <p style={{ 
+                    color: '#856404', 
+                    marginBottom: '0'
+                  }}>
                     {event.expectedPerformances}
                   </p>
+                </div>
+              )}
+              
+              {event.peopleWillAttend && (Array.isArray(event.peopleWillAttend) ? event.peopleWillAttend.length > 0 : event.peopleWillAttend) && (
+                <div style={{
+                  background: '#e8f4fd',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  border: '1px solid #b3d9ff'
+                }}>
+                  <h4 style={{ 
+                    color: '#1565c0',
+                    marginBottom: '8px',
+                    fontSize: '1.1em'
+                  }}>
+                    👥 People who might attend:
+                  </h4>
+                  <div style={{ 
+                    color: '#1565c0', 
+                    marginBottom: '0'
+                  }}>
+                    {Array.isArray(event.peopleWillAttend) ? (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {event.peopleWillAttend.map((person, idx) => (
+                          <span key={idx} style={{
+                            background: 'rgba(21, 101, 192, 0.1)',
+                            padding: '4px 8px',
+                            borderRadius: '12px',
+                            fontSize: '0.9em',
+                            border: '1px solid rgba(21, 101, 192, 0.3)'
+                          }}>
+                            {person}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p style={{ marginBottom: '0' }}>{event.peopleWillAttend}</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -309,112 +477,9 @@ function Results() {
         </div>
       )}
 
-      {!recs.recommendations.events.length && (
-        <div className="results-content">
-          <p>Paste your AI agent JSON:</p>
-          <textarea
-            value={paste}
-            onChange={(e) => setPaste(e.target.value)}
-            rows={8}
-            style={{ width: '100%', fontFamily: 'monospace' }}
-            placeholder='[{"name":"...", "location":{"lat":..,"lng":..,"address":"..."},"why":"...","people":["..."]}]'
-          />
-          <div style={{ marginTop: 8 }}>
-            <button className="primary-button" onClick={loadPaste}>Load JSON</button>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   )
-}
-
-function MapView({ events }) {
-  const mapRef = useRef(null)
-  const mapInstance = useRef(null)
-  const markersRef = useRef([])
-
-  useEffect(() => {
-    // load script if not present
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-    const hasScript = !!document.querySelector('script[data-gmaps]')
-    if (!hasScript) {
-      const s = document.createElement('script')
-      s.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&v=weekly`
-      s.async = true
-      s.defer = true
-      s.setAttribute('data-gmaps', '1')
-      document.head.appendChild(s)
-      s.onload = init
-    } else {
-      init()
-    }
-
-    function init() {
-      if (!mapRef.current) return
-      // center on first event or a default
-      const center = events[0]?.location
-        ? { lat: events[0].location.lat, lng: events[0].location.lng }
-        : { lat: 37.7749, lng: -122.4194 }
-
-      mapInstance.current = new window.google.maps.Map(mapRef.current, {
-        center,
-        zoom: events.length > 1 ? 11 : 13,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-      })
-
-      // clear old markers
-      markersRef.current.forEach(m => m.setMap(null))
-      markersRef.current = []
-
-      const bounds = new window.google.maps.LatLngBounds()
-      events.forEach(ev => {
-        const pos = { lat: ev.location.lat, lng: ev.location.lng }
-        const marker = new window.google.maps.Marker({
-          position: pos,
-          map: mapInstance.current,
-          title: ev.name || 'open mic',
-        })
-        const info = new window.google.maps.InfoWindow({
-          content: `
-            <div style="max-width:220px">
-              <strong>${escapeHtml(ev.name || 'open mic')}</strong><br/>
-              ${escapeHtml(ev?.location?.address || '')}<br/>
-              <small>${escapeHtml(ev.why || '')}</small>
-            </div>
-          `
-        })
-        marker.addListener('click', () => info.open({ map: mapInstance.current, anchor: marker }))
-        markersRef.current.push(marker)
-        bounds.extend(pos)
-      })
-
-      if (events.length > 1) {
-        mapInstance.current.fitBounds(bounds)
-      }
-    }
-
-    return () => {
-      markersRef.current.forEach(m => m.setMap(null))
-      markersRef.current = []
-    }
-  }, [events])
-
-  return (
-    <div className="result-map">
-      {events.length === 0 ? (
-        <p className="result-details">no mappable events (missing lat/lng)</p>
-      ) : (
-        <div ref={mapRef} style={{ width: '100%', height: '70vh', borderRadius: '12px', overflow: 'hidden', border: '1px solid #eee' }} />
-      )}
-    </div>
-  )
-}
-
-// tiny helper to avoid raw HTML injection issues in info windows
-function escapeHtml(str = '') {
-  return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))
 }
 
 export default Results

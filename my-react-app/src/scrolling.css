@@ -2,88 +2,168 @@
 .scroll-feed {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 1rem 1rem 6rem; /* space at bottom for nav bar */
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
     background: #000;
     overflow-y: auto;
-  }
-  
-  /* Each scroll item is centered */
-  .scroll-item {
+    min-height: 100vh;
+    box-sizing: border-box;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+/* Each scroll item is centered */
+.scroll-item {
     display: flex;
     justify-content: center;
-  }
-  
-  /* Video wrapper for positioning buttons */
-  .video-container {
+    width: 100%;
+    height: 100vh;
     position: relative;
-    width: min(75vw, 900px);  /* most of the page width */
-    height: 80vh;             /* most of the page height */
-    border-radius: 12px;
+}
+
+/* Video wrapper for positioning buttons */
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
     overflow: hidden;
     background: #000;
-  }
-  
-  /* Video fills the container */
-  .video {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Video fills the container */
+.video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-  }
-  .video { z-index: 1; }
-  
-  .action-buttons {
-    position: absolute;        /* so it's positioned over the video */
-    right: 20px;                /* move farther right */
+}
+.video { z-index: 1; }
+
+.action-buttons {
+    position: absolute;
+    right: 1rem;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 1rem;
     align-items: center;
-    z-index: 2;              /* bring above video */
-  }
+    z-index: 2;
+}
 
-  .tt-chip {
-    display: flex;              /* center icon inside */
+.tt-chip-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.tt-chip {
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    color: #fff;  
-    z-index: 10;           /* ensure React Icons are visible */
-    font-size: 20px;
-    box-shadow: 0 6px 14px rgba(0,0,0,.35);
-    border: 2px solid rgba(255,255,255,.55);
-    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.15), rgba(20,20,20,.65));
-  }
+    width: clamp(40px, 10vw, 50px);
+    height: clamp(40px, 10vw, 50px);
+    color: #fff;
+    z-index: 10;
+    font-size: clamp(16px, 4vw, 20px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.4);
+    border: 2px solid rgba(255,255,255,.6);
+    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.15), rgba(20,20,20,.75));
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
-  .tt-chip-wrapper span {
-    font-size: 10px;
+.tt-chip-wrapper span {
+    font-size: clamp(8px, 2vw, 10px);
     line-height: 1.1;
-    margin-top: 4px;
     color: #fff;
     opacity: 0.9;
-    text-shadow: 0 1px 2px rgba(0,0,0,.6);
-  }
-  
+    text-shadow: 0 1px 2px rgba(0,0,0,.8);
+    text-align: center;
+    font-weight: 500;
+}
 
+.tt-chip:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,.5);
+}
 
-  
-  @media (max-width: 480px) {
-    .action-buttons { right: 2px; gap: 12px; }
-    .tt-chip { width: 40px; height: 40px; font-size: 18px; }
-    .tt-chip-wrapper span { font-size: 9px; }
-  }  
-  
-  .tt-chip:hover {
-    transform: scale(1.06);
-  }
-  
-  .tt-chip.active {
-    background: rgba(76, 110, 245, 0.85);
-  }
+.tt-chip.active {
+    background: radial-gradient(ellipse at 30% 30%, rgba(76, 110, 245, 0.3), rgba(76, 110, 245, 0.9));
+    border-color: rgba(76, 110, 245, 0.8);
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 768px) {
+    .scroll-feed {
+        gap: 0.5rem;
+        padding: 0.25rem 0.25rem 6rem;
+    }
+    
+    .video-container {
+        height: calc(100vh - 7rem);
+        border-radius: 6px;
+    }
+    
+    .action-buttons {
+        right: 0.75rem;
+        gap: 0.75rem;
+    }
+    
+    .tt-chip {
+        width: clamp(36px, 12vw, 44px);
+        height: clamp(36px, 12vw, 44px);
+    }
+}
+
+@media (max-width: 480px) {
+    .scroll-feed {
+        padding: 0.1rem 0.1rem 6rem;
+    }
+    
+    .video-container {
+        height: calc(100vh - 6.5rem);
+        border-radius: 4px;
+    }
+    
+    .action-buttons {
+        right: 0.5rem;
+        gap: 0.5rem;
+    }
+    
+    .tt-chip {
+        width: clamp(32px, 14vw, 40px);
+        height: clamp(32px, 14vw, 40px);
+        font-size: clamp(14px, 5vw, 18px);
+    }
+    
+    .tt-chip-wrapper span {
+        font-size: clamp(7px, 2.5vw, 9px);
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .video-container {
+        height: calc(100vh - 5rem);
+    }
+    
+    .action-buttons {
+        gap: 0.5rem;
+    }
+}
   

@@ -5,23 +5,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  position: relative;
 }
 
 /* Header */
 .profile-header h1 {
   font-family: 'Pacifico', 'Montserrat', cursive, sans-serif;
-  font-size: 2.8rem;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
   color: #4c6ef5;
   margin-bottom: 0.5rem;
   letter-spacing: 2px;
   text-shadow: 1px 2px 8px #fff3;
+  text-align: center;
 }
 
 .profile-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 /* Profile content card */
@@ -29,38 +40,48 @@
   background: rgba(255,255,255,0.85);
   border-radius: 18px;
   box-shadow: 0 6px 24px rgba(76,110,245,0.10);
-  padding: 2rem;
+  padding: 1rem;
   width: 100%;
-  max-width: 650px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 6rem; /* Space for bottom navigation */
 }
 
 /* Fields */
+.profile-fields {
+  width: 100%;
+  max-width: 500px;
+}
+
 .profile-fields p {
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 3vw, 1.15rem);
   margin: 1rem 0;
   color: #333;
   font-family: 'Inter', 'Montserrat', sans-serif;
+  text-align: left;
+  width: 100%;
 }
 
 .profile-value {
   font-family: 'Montserrat', 'Inter', sans-serif;
   font-weight: 600;
   color: #222;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
 .profile-input,
 .profile-textarea {
-  font-size: 1rem;
-  padding: 0.5rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid #d1d5db;
-  width: 80%;
+  width: 100%;
+  max-width: 100%;
   margin-top: 0.5rem;
   font-family: 'Inter', 'Montserrat', sans-serif;
+  box-sizing: border-box;
 }
 
 .profile-textarea {
@@ -73,6 +94,8 @@
   color: #666;
   margin-top: 0.5rem;
   font-family: 'Inter', 'Montserrat', sans-serif;
+  width: 100%;
+  text-align: left;
 }
 
 /* Upload section */
@@ -85,6 +108,7 @@
 
 .profile-file-input {
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 /* Media preview */
@@ -94,7 +118,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .media-card {
@@ -103,7 +127,7 @@
   box-shadow: 0 2px 8px rgba(76,110,245,0.10);
   padding: 1rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
   text-align: center;
   font-family: 'Inter', 'Montserrat', sans-serif;
 }
@@ -113,22 +137,25 @@
   margin-bottom: 0.5rem;
   color: #4c6ef5;
   font-family: 'Montserrat', 'Pacifico', cursive, sans-serif;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  word-break: break-word;
 }
 
 .media-img,
 .media-video {
   max-width: 100%;
-  max-height: 300px;
+  max-height: 50vh;
   border-radius: 8px;
   margin-top: 0.5rem;
   background: #222;
+  width: 100%;
+  object-fit: contain;
 }
 
 /* Buttons */
 .primary-button {
   padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   background: linear-gradient(90deg, #4c6ef5 60%, #f7b7e9 100%);
   color: white;
   border: none;
@@ -137,9 +164,45 @@
   font-family: 'Montserrat', 'Inter', sans-serif;
   box-shadow: 0 2px 8px rgba(76,110,245,0.10);
   transition: background 0.2s, transform 0.2s;
+  width: auto;
+  min-width: 100px;
 }
 
 .primary-button:hover {
   background: linear-gradient(90deg, #3b5bdb 60%, #a0c4ff 100%);
   transform: scale(1.05);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 0.5rem;
+  }
+  
+  .profile-content {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .profile-header {
+    margin-bottom: 0.5rem;
+  }
+  
+  .media-card {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 0.25rem;
+  }
+  
+  .profile-content {
+    padding: 0.75rem;
+  }
+  
+  .profile-fields p {
+    margin: 0.75rem 0;
+  }
 }
