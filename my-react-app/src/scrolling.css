@@ -30,7 +30,7 @@
 }
 
 .app-name {
-    font-family: 'Pacifico', 'Montserrat', cursive, sans-serif;
+    font-family: 'Inter', 'Montserrat', sans-serif;
     font-size: clamp(1.5rem, 4vw, 2rem);
     color: #4c6ef5;
     margin: 0;

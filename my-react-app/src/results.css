@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-family: 'Inter', 'Montserrat', sans-serif;;
   padding: 1rem;
   padding-bottom: 8rem; /* Extra padding for navigation */
   box-sizing: border-box;
@@ -19,7 +19,7 @@
 
 /* Header */
 .results-header h1 {
-  font-family: 'Pacifico', 'Montserrat', cursive, sans-serif;
+  font-family: 'Inter', 'Montserrat', sans-serif;;
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   color: #4c6ef5;
   margin-bottom: 0.5rem;
@@ -75,7 +75,7 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #4c6ef5;
-  font-family: 'Montserrat', 'Pacifico', cursive, sans-serif;
+  font-family: 'Inter', 'Montserrat', sans-serif;;
   font-size: clamp(1rem, 3vw, 1.2rem);
   word-break: break-word;
 }

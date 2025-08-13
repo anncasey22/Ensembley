@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-family: 'Pacifico', 'Montserrat', sans-serif;
   padding: 1rem;
   box-sizing: border-box;
   width: 100vw;
@@ -17,7 +17,7 @@
 
 /* Header */
 .profile-header h1 {
-  font-family: 'Pacifico', 'Montserrat', cursive, sans-serif;
+  font-family: 'Pacifico', 'Montserrat', sans-serif;
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   color: #4c6ef5;
   margin-bottom: 0.5rem;
