@@ -8,7 +8,7 @@ const STORAGE_KEY = 'scrolling_interactions'
 const FEED = [
   {
     id: 'item-1',
-    videoId: 'OvvdBk0gRm0',
+    videoId: 'd5FpxXqZYgs',
     type: 'youtube',
     genre: 'rock',
     instrument: 'drums',
@@ -17,17 +17,17 @@ const FEED = [
   
   {
     id: 'item-2',
-    videoId: 'oCBvFNFlMcM',
+    videoId: 'AxAzsM6X-mQ',
     type: 'youtube',
-    genre: 'indie',
+    genre: 'jazz',
     instrument: 'piano',
     artist: 'Noah Kim',
   },
 
   {
     id: 'item-4',
-    src: 'https://videos.pexels.com/video-files/2941115/2941115-uhd_2732_1440_24fps.mp4', // video of a man playing jazz trumpet on the street :contentReference[oaicite:1]{index=1}
-    type: 'video',
+    videoId: '-MmVRiUjhOM',
+    type: 'youtube',
     genre: 'jazz',
     instrument: 'trumpet',
     artist: 'Marcus Johnson',
@@ -35,8 +35,8 @@ const FEED = [
 
   {
     id: 'item-3',
-    src: 'https://videos.pexels.com/video-files/3002399/3002399-hd_1920_1080_25fps.mp4',
-    type: 'video',
+    videoId: 'k7yg5Gn31kg',
+    type: 'youtube',
     genre: 'blues',
     instrument: 'drums',
     artist: 'Lia Chen',
@@ -44,8 +44,8 @@ const FEED = [
 
   {
     id: 'item-8',
-    src: 'https://videos.pexels.com/video-files/2306150/2306150-hd_1920_1080_30fps.mp4',
-    type: 'video',
+    videoId: 'CzsnXrygTmk',
+    type: 'youtube',
     genre: 'classical',
     instrument: 'piano',
     artist: 'Hannah Bennet',
@@ -53,8 +53,8 @@ const FEED = [
 
   {
     id: 'item-7',
-    src: 'https://videos.pexels.com/video-files/2017436/2017436-hd_1920_1080_24fps.mp4',
-    type: 'video',
+    videoId: 'AxAzsM6X-mQ',
+    type: 'youtube',
     genre: 'jazz',
     instrument: 'piano',
     artist: 'Liam Bennet',
@@ -62,8 +62,8 @@ const FEED = [
 
   {
     id: 'item-5',
-    src: 'https://videos.pexels.com/video-files/855880/855880-hd_1920_1080_25fps.mp4',
-    type: 'video',
+    videoId: 'gnZkjjqoMWU',
+    type: 'youtube',
     genre: 'classical',
     instrument: 'violin',
     artist: 'Tom Martinez',
@@ -71,26 +71,56 @@ const FEED = [
 
   {
     id: 'item-6',
-    src: 'https://videos.pexels.com/video-files/3326187/3326187-hd_1920_1080_24fps.mp4',
-    type: 'video',
+    videoId: 'd5FpxXqZYgs',
+    type: 'youtube',
     genre: 'rock',
     instrument: 'drums',
     artist: 'Elliot Smith ',
   },
   {
-    id: 'item-6',
-    src: 'https://videos.pexels.com/video-files/2836275/2836275-uhd_2560_1440_24fps.mp4',
-    type: 'video',
+    id: 'item-9',
+    videoId: 'XFUK6ZQw7Ug',
+    type: 'youtube',
     genre: 'jazz',
     instrument: 'guitar',
     artist: 'Connor Martinez',
   },
 
-  
+  {
+    id: 'item-10',
+    videoId: '_isNECbisPk',
+    type: 'youtube',
+    genre: 'phonk',
+    instrument: 'violent',
+    artist: 'Amanda',
+  },
 
+  {
+    id: 'item-11',
+    videoId: 'LfskMYLvhWo',
+    type: 'youtube',
+    genre: 'phonk',
+    instrument: 'electric guitar',
+    artist: 'danteswan',
+  },
 
+  {
+    id: 'item-12',
+    videoId: 'awgLII81Msw',
+    type: 'youtube',
+    genre: 'rock',
+    instrument: 'guitar',
+    artist: 'kaiz',
+  },
 
-
+  {
+    id: 'item-13',
+    videoId: 'sI1371rVvWQ',
+    type: 'youtube',
+    genre: 'pop',
+    instrument: 'voice',
+    artist: 'phao',
+  },
 
 ]
 
@@ -141,9 +171,9 @@ function Scrolling() {
             width: window.innerWidth > 768 ? '800' : '100%',
             videoId: item.videoId,
             playerVars: {
-              autoplay: 1,
+              autoplay: 0, // Don't autoplay on creation
               controls: 0,
-              mute: 0, // Allow audio
+              mute: 1, // Start muted
               loop: 1,
               playlist: item.videoId,
               playsinline: 1,
@@ -157,9 +187,6 @@ function Scrolling() {
             },
             events: {
               onReady: (event) => {
-                // Start muted for autoplay compliance, but allow unmuting
-                event.target.mute()
-                
                 // Configure iframe for proper scaling and reduced interference
                 const iframe = event.target.getIframe()
                 if (iframe) {
@@ -184,20 +211,9 @@ function Scrolling() {
                   iframe.style.left = '0'
                   iframe.style.zIndex = '1'
                   iframe.style.pointerEvents = 'none' // Disable pointer events on iframe
-                  
-                  // Try to start playing immediately
-                  setTimeout(() => {
-                    try {
-                      event.target.playVideo()
-                      // Unmute after a short delay to allow audio
-                      setTimeout(() => {
-                        event.target.unMute()
-                      }, 500)
-                    } catch (e) {
-                      console.log('Autoplay blocked, will play on intersection')
-                    }
-                  }, 100)
                 }
+                
+                // Don't autoplay on ready - let intersection observer handle it
               }
             }
           })
@@ -226,11 +242,24 @@ function Scrolling() {
           const itemId = element.getAttribute('data-item-id')
           
           if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
-            // Handle regular videos
+            // First, pause all other videos/players
+            Object.values(videoRefs.current).forEach(video => {
+              if (video && video !== element) {
+                video.pause()
+              }
+            })
+            
+            Object.entries(youtubePlayersRef.current).forEach(([id, player]) => {
+              if (id !== itemId && player && player.pauseVideo) {
+                player.pauseVideo()
+                player.mute()
+              }
+            })
+            
+            // Then play the current one
             if (element.tagName === 'VIDEO') {
               element.play().catch(() => {})
             }
-            // Handle YouTube players
             else if (youtubePlayersRef.current[itemId]) {
               const player = youtubePlayersRef.current[itemId]
               if (player && player.playVideo) {
@@ -244,15 +273,15 @@ function Scrolling() {
               }
             }
           } else {
-            // Handle regular videos
+            // Pause when out of view
             if (element.tagName === 'VIDEO') {
               element.pause()
             }
-            // Handle YouTube players  
             else if (youtubePlayersRef.current[itemId]) {
               const player = youtubePlayersRef.current[itemId]
               if (player && player.pauseVideo) {
                 player.pauseVideo()
+                player.mute()
               }
             }
           }

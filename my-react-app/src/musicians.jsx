@@ -11,7 +11,8 @@ const MUSICIANS = [
     instrument: 'Trumpet, Guitar',
     bio: 'Plays trumpet, guitar, and sings. Enjoys jazz, rock, piano, trumpet, and acoustic.',
     genres: ['jazz', 'rock', 'acoustic'],
-    profileImage: null
+    profileImage: null,
+    videoId: '-MmVRiUjhOM' // Trumpet Jazz
   },
   {
     id: 2,
@@ -20,7 +21,8 @@ const MUSICIANS = [
     instrument: 'Acoustic Guitar, Harmonica',
     bio: 'Singer-songwriter with a love for folk and indie. Plays acoustic guitar and harmonica.',
     genres: ['folk', 'indie', 'acoustic'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'ft8HsrPBbg4' // Blues Harmonica
   },
   {
     id: 3,
@@ -29,7 +31,8 @@ const MUSICIANS = [
     instrument: 'Piano, Bass',
     bio: 'Jazz pianist and bassist who also dabbles in classical composition.',
     genres: ['jazz', 'classical'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'AxAzsM6X-mQ' // Jazz Piano
   },
   {
     id: 4,
@@ -38,7 +41,8 @@ const MUSICIANS = [
     instrument: 'Drums, Percussion',
     bio: 'Drummer and percussionist with a passion for funk, R&B, and world rhythms.',
     genres: ['funk', 'r&b', 'world'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'VUxb_URO-Dc' // Funk drums
   },
   {
     id: 5,
@@ -47,7 +51,8 @@ const MUSICIANS = [
     instrument: 'Electric Guitar',
     bio: 'Electric guitarist who enjoys blues rock, psychedelic jams, and improvisation.',
     genres: ['blues', 'rock', 'psychedelic'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'plgU6I_HtZQ' // Electric Guitar Rock
   },
   {
     id: 6,
@@ -56,7 +61,8 @@ const MUSICIANS = [
     instrument: 'Violin',
     bio: 'Classically trained violinist who blends traditional Indian music with pop.',
     genres: ['classical', 'indian', 'pop'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'hEc5EI6uhUc' // Indian Classical Violin
   },
   {
     id: 7,
@@ -65,7 +71,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Beat-making',
     bio: 'Hip-hop MC and spoken word poet with a love for jazz samples and beat-making.',
     genres: ['hip-hop', 'jazz', 'spoken word'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'zaXMjDZT7e8' // Jazz Vocals
   },
   {
     id: 8,
@@ -74,7 +81,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Keyboard',
     bio: 'Pop vocalist and keyboardist with a flair for musical theatre.',
     genres: ['pop', 'musical theatre'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'I52EJ-ihVGk' // Musical Theatre Vocals
   },
   {
     id: 9,
@@ -83,7 +91,8 @@ const MUSICIANS = [
     instrument: 'Synthesizer, Electronic',
     bio: 'Experimental electronic producer and modular synth performer.',
     genres: ['electronic', 'experimental'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'Vk-v5NuVbIc' // Electronic Synthesizer
   },
   {
     id: 10,
@@ -92,7 +101,8 @@ const MUSICIANS = [
     instrument: 'Vocals',
     bio: 'Opera-trained soprano who moonlights as a rock frontwoman.',
     genres: ['opera', 'rock', 'classical'],
-    profileImage: null
+    profileImage: null,
+    videoId: '1FkowGRLjzo' // Opera Vocals
   },
   {
     id: 11,
@@ -101,7 +111,8 @@ const MUSICIANS = [
     instrument: 'Guitar, Banjo',
     bio: 'Folk guitarist and banjo player who writes storytelling ballads inspired by travel.',
     genres: ['folk', 'acoustic', 'storytelling'],
-    profileImage: null
+    profileImage: null,
+    videoId: '2oeZS40DlWE' // Folk Vocals
   },
   {
     id: 12,
@@ -110,7 +121,8 @@ const MUSICIANS = [
     instrument: 'Vocals',
     bio: 'Soul and R&B vocalist with gospel roots, often performs with a live backing band.',
     genres: ['soul', 'r&b', 'gospel'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'm_zyYSDbmvA' // Soul Vocals
   },
   {
     id: 13,
@@ -119,7 +131,8 @@ const MUSICIANS = [
     instrument: 'Harmonica, Slide Guitar',
     bio: 'Blues harmonica player and slide guitarist with a love for delta blues traditions.',
     genres: ['blues', 'delta blues'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'k7yg5Gn31kg' // Blues Vocals
   },
   {
     id: 14,
@@ -128,7 +141,8 @@ const MUSICIANS = [
     instrument: 'Cello',
     bio: 'Cellist who performs both in classical ensembles and indie-folk collaborations.',
     genres: ['classical', 'indie-folk'],
-    profileImage: null
+    profileImage: null,
+    videoId: '5UqpV3rBklc' // Indie Cello
   },
   {
     id: 15,
@@ -137,7 +151,8 @@ const MUSICIANS = [
     instrument: 'Bass',
     bio: 'Funk bassist and groove composer, known for high-energy stage presence.',
     genres: ['funk', 'groove'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'q44kbxmkwKg' // Funk Bass
   },
   {
     id: 16,
@@ -146,7 +161,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Acoustic Guitar',
     bio: 'Singer-songwriter blending Middle Eastern melodies with acoustic pop.',
     genres: ['middle eastern', 'acoustic', 'pop'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'M_RX16B0r5M' // Pop Vocals
   },
   {
     id: 17,
@@ -155,7 +171,8 @@ const MUSICIANS = [
     instrument: 'Drums',
     bio: 'Rock drummer with a background in punk and alternative, known for dynamic fills.',
     genres: ['rock', 'punk', 'alternative'],
-    profileImage: null
+    profileImage: null,
+    videoId: '2D5YAeZuLKs' // Punk Drums
   },
   {
     id: 18,
@@ -164,7 +181,8 @@ const MUSICIANS = [
     instrument: 'Saxophone',
     bio: 'Jazz saxophonist who also arranges big band charts and smooth lounge sets.',
     genres: ['jazz', 'big band', 'lounge'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'iHik50eYi2s' // Jazz Saxophone
   },
   {
     id: 19,
@@ -173,7 +191,8 @@ const MUSICIANS = [
     instrument: 'DJ Equipment, Production',
     bio: 'EDM DJ and producer specializing in house, trance, and remixes of pop hits.',
     genres: ['edm', 'house', 'trance'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'Vk-v5NuVbIc' // Electronic Synthesizer
   },
   {
     id: 20,
@@ -182,7 +201,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Piano',
     bio: 'Broadway-inspired singer and pianist who often covers show tunes and movie soundtracks.',
     genres: ['broadway', 'show tunes', 'pop'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'nzqS-69301Q' // Broadway Vocals
   },
   {
     id: 21,
@@ -191,7 +211,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Rhythm Guitar',
     bio: 'Blues-rock vocalist and rhythm guitarist with a gritty, soulful sound.',
     genres: ['blues', 'rock'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'd_dFw6NzUt8' // Rock Vocals
   },
   {
     id: 22,
@@ -200,7 +221,8 @@ const MUSICIANS = [
     instrument: 'Piano',
     bio: 'Classical pianist who blends romantic-era compositions with modern cinematic scores.',
     genres: ['classical', 'cinematic'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'CzsnXrygTmk' // Classical Piano
   },
   {
     id: 23,
@@ -209,7 +231,8 @@ const MUSICIANS = [
     instrument: 'Acoustic Guitar',
     bio: 'Acoustic indie-folk singer with a penchant for fingerpicking and lyrical storytelling.',
     genres: ['indie-folk', 'acoustic'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'PzumNALIFWM' // Indie Vocals
   },
   {
     id: 24,
@@ -218,7 +241,8 @@ const MUSICIANS = [
     instrument: 'Tabla',
     bio: 'Tabla player who fuses traditional Indian rhythms with jazz and fusion ensembles.',
     genres: ['indian', 'jazz', 'fusion'],
-    profileImage: null
+    profileImage: null,
+    videoId: '_NXkaxaZ03g' // Indian Tabla
   },
   {
     id: 25,
@@ -227,7 +251,8 @@ const MUSICIANS = [
     instrument: 'Trumpet, Flugelhorn',
     bio: 'Trumpeter and flugelhorn player known for Latin jazz and salsa-inspired performances.',
     genres: ['latin jazz', 'salsa'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'yQemz-KaytQ' // Trumpet Salsa
   },
   {
     id: 26,
@@ -236,7 +261,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Synthesizer',
     bio: 'Dream-pop vocalist and synth player who creates ethereal, ambient soundscapes.',
     genres: ['dream-pop', 'ambient'],
-    profileImage: null
+    profileImage: null,
+    videoId: '5fJnwSGNyow' // Ambient Percussion
   },
   {
     id: 27,
@@ -245,7 +271,8 @@ const MUSICIANS = [
     instrument: 'Mandolin',
     bio: 'Bluegrass mandolinist with roots in Appalachian folk traditions.',
     genres: ['bluegrass', 'appalachian folk'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'xLQCDJkPgr8' // Bluegrass Mandolin
   },
   {
     id: 28,
@@ -254,7 +281,8 @@ const MUSICIANS = [
     instrument: 'Ukulele, Vocals',
     bio: 'Singer-songwriter who pairs ukulele melodies with heartfelt, personal lyrics.',
     genres: ['acoustic', 'indie'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'yhkwkGM_91g' // Indie Ukulele
   },
   {
     id: 29,
@@ -263,7 +291,8 @@ const MUSICIANS = [
     instrument: 'Experimental Percussion',
     bio: 'Experimental percussionist exploring found-object instruments and rhythmic looping.',
     genres: ['experimental', 'ambient'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'cRkr6-amhzI' // Experimental Percussion
   },
   {
     id: 30,
@@ -272,7 +301,8 @@ const MUSICIANS = [
     instrument: 'Vocals, Acoustic Guitar',
     bio: 'Country vocalist and acoustic guitarist inspired by 90s Nashville sound.',
     genres: ['country', 'acoustic'],
-    profileImage: null
+    profileImage: null,
+    videoId: 'udrFVfObP6Y' // Country Vocals
   }
 ]
 
@@ -316,14 +346,48 @@ function MusicianProfile({ musician }) {
         </div>
 
         <div className="profile-upload">
-          <p><strong>Media Uploads:</strong></p>
+          <p><strong>Performance Videos:</strong></p>
           <div className="media-preview">
-            <div className="media-card">
-              <div className="media-name">No media uploaded yet</div>
-              <p style={{ color: '#666', fontSize: '0.9rem', margin: '0.5rem 0' }}>
-                This musician hasn't uploaded any performance videos or audio yet.
-              </p>
-            </div>
+            {musician.videoId ? (
+              <div className="media-card">
+                <div className="media-name">Featured Performance</div>
+                <div style={{ 
+                  position: 'relative',
+                  paddingBottom: '56.25%', // 16:9 aspect ratio
+                  height: 0,
+                  overflow: 'hidden',
+                  marginTop: '1rem',
+                  borderRadius: '8px'
+                }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${musician.videoId}?autoplay=1&controls=0&rel=0&modestbranding=1&mute=0&loop=1&playlist=${musician.videoId}&playsinline=1&fs=0&disablekb=1&iv_load_policy=3&cc_load_policy=0`}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      borderRadius: '8px',
+                      pointerEvents: 'none'
+                    }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={`${musician.name} Performance`}
+                  />
+                </div>
+                <p style={{ color: '#666', fontSize: '0.9rem', margin: '0.5rem 0' }}>
+                  Watch {musician.name} perform {musician.instrument.toLowerCase()} in their signature style.
+                </p>
+              </div>
+            ) : (
+              <div className="media-card">
+                <div className="media-name">No media uploaded yet</div>
+                <p style={{ color: '#666', fontSize: '0.9rem', margin: '0.5rem 0' }}>
+                  This musician hasn't uploaded any performance videos or audio yet.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
