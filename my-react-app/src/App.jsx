@@ -12,11 +12,6 @@ function Home() {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <h1>Ensembley</h1>
-        <p>Your space to connect, discover, and share music.</p>
-      </header>
-
       <main className="app-main">
         <section className="intro">
           <h2>Welcome to Ensembley</h2>
