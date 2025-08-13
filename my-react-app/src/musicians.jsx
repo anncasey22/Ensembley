@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import './profile.css'
 
 // Musicians data with expanded profile information
@@ -333,6 +334,14 @@ function MusicianProfile({ musician }) {
 function Musicians() {
   const [selectedMusician, setSelectedMusician] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const location = useLocation()
+
+  // Check if we navigated here with a specific musician to show
+  useEffect(() => {
+    if (location.state?.selectedMusician) {
+      setSelectedMusician(location.state.selectedMusician)
+    }
+  }, [location.state])
 
   const filteredMusicians = MUSICIANS.filter(musician =>
     musician.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

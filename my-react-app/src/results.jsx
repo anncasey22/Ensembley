@@ -381,7 +381,7 @@ function Results() {
           className="primary-button"
           onClick={() => {
             onClose()
-            navigate('/musicians')
+            navigate('/musicians', { state: { selectedMusician: musician } })
           }}
           style={{ width: '100%', marginTop: '1rem' }}
         >
