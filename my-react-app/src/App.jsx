@@ -4,6 +4,7 @@ import Profile from './profile.jsx'
 import Scrolling from './scrolling.jsx'
 import Results from './results.jsx'
 import Interactions from './interactions.jsx'
+import Musicians from './musicians.jsx'
 import Navigation from './navigation.jsx'
 
 function Home() {
@@ -37,7 +38,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/scrolling" element={<Scrolling />} />
         <Route path="/results" element={<Results />} />
-        <Route path="/interactions" element={<Interactions />} /> {/* new route */}
+        <Route path="/interactions" element={<Interactions />} />
+        <Route path="/musicians" element={<Musicians />} /> {/* musicians directory */}
         <Route path="*" element={<Profile />} /> {/* default route */}
       </Routes>
       <Navigation />

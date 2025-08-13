@@ -1,6 +1,8 @@
 // src/results.jsx
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './results.css'
+import { MUSICIANS } from './musicians.jsx'
 
 const RECS_KEY = 'recommendations'
 const STORAGE_KEY = 'scrolling_interactions'
@@ -19,11 +21,31 @@ const STORAGE_KEY = 'scrolling_interactions'
  */
 
 function Results() {
+  const navigate = useNavigate()
   const [recs, setRecs] = useState({ recommendations: { events: [] }, userPreferences: {} })
   const [paste, setPaste] = useState('')
   const [data, setData] = useState([])
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
+  const [selectedMusician, setSelectedMusician] = useState(null)
+
+  // Function to find and display musician profile
+  const handlePersonClick = (personName) => {
+    const musician = MUSICIANS.find(m => 
+      m.name.toLowerCase() === personName.toLowerCase() ||
+      personName.toLowerCase().includes(m.name.toLowerCase()) ||
+      m.name.toLowerCase().includes(personName.toLowerCase())
+    )
+    
+    if (musician) {
+      setSelectedMusician(musician)
+    } else {
+      // If not found in musicians list, you could show a message or navigate to musicians page
+      console.log(`Musician "${personName}" not found in directory`)
+      // Optionally navigate to musicians page to search
+      // navigate('/musicians')
+    }
+  }
 
   //load interactions data
   useEffect(() => {
@@ -64,13 +86,28 @@ function Results() {
           setRecs(parsed)
         } else if (parsed.events) {
           // AI's current format - convert it
-          const convertedEvents = parsed.events.map(event => ({
-            name: event.venue_name || event.name || 'Open Mic Venue',
-            description: event.description || '',
-            matchReason: event.match || event.matchReason || '',
-            expectedPerformances: event.performances || event.expectedPerformances || '',
-            peopleWillAttend: event['people will attend'] || event.peopleWillAttend || ''
-          }))
+          const convertedEvents = parsed.events.map(event => {
+            let peopleWillAttend = event['people will attend'] || event.peopleWillAttend || '';
+            
+            // Ensure peopleWillAttend is always an array
+            if (typeof peopleWillAttend === 'string') {
+              // Split by comma and clean up the names
+              peopleWillAttend = peopleWillAttend
+                .split(',')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+            } else if (!Array.isArray(peopleWillAttend)) {
+              peopleWillAttend = [];
+            }
+            
+            return {
+              name: event.venue_name || event.name || 'Open Mic Venue',
+              description: event.description || '',
+              matchReason: event.match || event.matchReason || '',
+              expectedPerformances: event.performances || event.expectedPerformances || '',
+              peopleWillAttend: peopleWillAttend
+            };
+          })
           setRecs({ 
             recommendations: { events: convertedEvents }, 
             userPreferences: parsed.userPreferences || { genres: [], instruments: [], artists: [] }
@@ -110,13 +147,28 @@ function Results() {
       let formattedData;
       if (parsed.events) {
         // Convert AI format to our internal format
-        const convertedEvents = parsed.events.map(event => ({
-          name: event.venue_name || event.name || 'Open Mic Venue',
-          description: event.description || '',
-          matchReason: event.match || event.matchReason || '',
-          expectedPerformances: event.performances || event.expectedPerformances || '',
-          peopleWillAttend: event['people will attend'] || event.peopleWillAttend || ''
-        }))
+        const convertedEvents = parsed.events.map(event => {
+          let peopleWillAttend = event['people will attend'] || event.peopleWillAttend || '';
+          
+          // Ensure peopleWillAttend is always an array
+          if (typeof peopleWillAttend === 'string') {
+            // Split by comma and clean up the names
+            peopleWillAttend = peopleWillAttend
+              .split(',')
+              .map(name => name.trim())
+              .filter(name => name.length > 0);
+          } else if (!Array.isArray(peopleWillAttend)) {
+            peopleWillAttend = [];
+          }
+          
+          return {
+            name: event.venue_name || event.name || 'Open Mic Venue',
+            description: event.description || '',
+            matchReason: event.match || event.matchReason || '',
+            expectedPerformances: event.performances || event.expectedPerformances || '',
+            peopleWillAttend: peopleWillAttend
+          };
+        })
         
         formattedData = {
           recommendations: { events: convertedEvents },
@@ -252,12 +304,106 @@ function Results() {
     setRecs({ recommendations: { events: [] }, userPreferences: {} })
   }
 
-  return (
-    <div className="results-container">
-      <div className="results-header">
-        <h1 style={{ color: '#333' }}>Your Personalized Recommendations</h1>
+  // Musician Profile Modal Component
+  const MusicianModal = ({ musician, onClose }) => (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0,0,0,0.7)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      padding: '2rem'
+    }} onClick={onClose}>
+      <div style={{
+        background: 'linear-gradient(135deg, #f7b7e9 0%, #a0c4ff 100%)',
+        borderRadius: '18px',
+        padding: '2rem',
+        maxWidth: '500px',
+        width: '90%',
+        maxHeight: '80vh',
+        overflow: 'auto',
+        position: 'relative'
+      }} onClick={(e) => e.stopPropagation()}>
+        <button 
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '1rem',
+            right: '1rem',
+            background: 'rgba(255,255,255,0.8)',
+            border: 'none',
+            borderRadius: '50%',
+            width: '30px',
+            height: '30px',
+            cursor: 'pointer',
+            fontSize: '18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          ×
+        </button>
+        
+        <h2 style={{ color: '#4c6ef5', marginBottom: '1rem', fontFamily: "'Pacifico', cursive" }}>
+          {musician.name}
+        </h2>
+        
+        <div style={{ 
+          background: 'rgba(255,255,255,0.1)', 
+          borderRadius: '12px', 
+          padding: '1rem',
+          marginBottom: '1rem'
+        }}>
+          <p style={{ margin: '0.5rem 0', color: '#333' }}>
+            <strong>Age:</strong> {musician.age}
+          </p>
+          <p style={{ margin: '0.5rem 0', color: '#333' }}>
+            <strong>Instrument:</strong> {musician.instrument}
+          </p>
+          <p style={{ margin: '0.5rem 0', color: '#333' }}>
+            <strong>Genres:</strong> {musician.genres.join(', ')}
+          </p>
+          <p style={{ margin: '0.5rem 0', color: '#333' }}>
+            <strong>Bio:</strong>
+          </p>
+          <p style={{ margin: '0.5rem 0', color: '#555', fontStyle: 'italic' }}>
+            {musician.bio}
+          </p>
+        </div>
+        
+        <button 
+          className="primary-button"
+          onClick={() => {
+            onClose()
+            navigate('/musicians')
+          }}
+          style={{ width: '100%', marginTop: '1rem' }}
+        >
+          View Full Profile in Musicians Directory
+        </button>
       </div>
-      <div className="results-content">
+    </div>
+  )
+
+  return (
+    <>
+      {selectedMusician && (
+        <MusicianModal 
+          musician={selectedMusician} 
+          onClose={() => setSelectedMusician(null)} 
+        />
+      )}
+      <div className="results-container">
+        <div className="results-header">
+          <h1 style={{ color: '#333' }}>Your Personalized Recommendations</h1>
+        </div>
+        <div className="results-content">
         <div className="button-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', width: '100%', marginBottom: '1rem' }}>
           <button 
             className="primary-button" 
@@ -455,19 +601,85 @@ function Results() {
                     {Array.isArray(event.peopleWillAttend) ? (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {event.peopleWillAttend.map((person, idx) => (
-                          <span key={idx} style={{
-                            background: 'rgba(21, 101, 192, 0.1)',
-                            padding: '4px 8px',
-                            borderRadius: '12px',
-                            fontSize: '0.9em',
-                            border: '1px solid rgba(21, 101, 192, 0.3)'
-                          }}>
+                          <button 
+                            key={idx} 
+                            onClick={() => handlePersonClick(person)}
+                            style={{
+                              background: 'linear-gradient(135deg, #1976d2, #1565c0)',
+                              padding: '8px 16px',
+                              borderRadius: '8px',
+                              fontSize: '0.9em',
+                              border: 'none',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              color: 'white',
+                              fontFamily: 'inherit',
+                              fontWeight: '600',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                              minWidth: '80px',
+                              textAlign: 'center',
+                              ':hover': {
+                                background: 'linear-gradient(135deg, #1565c0, #0d47a1)',
+                                transform: 'translateY(-2px)',
+                                boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+                              }
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.background = 'linear-gradient(135deg, #1565c0, #0d47a1)'
+                              e.target.style.transform = 'translateY(-2px)'
+                              e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.background = 'linear-gradient(135deg, #1976d2, #1565c0)'
+                              e.target.style.transform = 'translateY(0px)'
+                              e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                          >
                             {person}
-                          </span>
+                          </button>
                         ))}
                       </div>
                     ) : (
-                      <p style={{ marginBottom: '0' }}>{event.peopleWillAttend}</p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {event.peopleWillAttend.split(',').map((person, idx) => (
+                          <button 
+                            key={idx} 
+                            onClick={() => handlePersonClick(person.trim())}
+                            style={{
+                              background: 'linear-gradient(135deg, #1976d2, #1565c0)',
+                              padding: '8px 16px',
+                              borderRadius: '8px',
+                              fontSize: '0.9em',
+                              border: 'none',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              color: 'white',
+                              fontFamily: 'inherit',
+                              fontWeight: '600',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                              minWidth: '80px',
+                              textAlign: 'center',
+                              ':hover': {
+                                background: 'linear-gradient(135deg, #1565c0, #0d47a1)',
+                                transform: 'translateY(-2px)',
+                                boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+                              }
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.background = 'linear-gradient(135deg, #1565c0, #0d47a1)'
+                              e.target.style.transform = 'translateY(-2px)'
+                              e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.background = 'linear-gradient(135deg, #1976d2, #1565c0)'
+                              e.target.style.transform = 'translateY(0px)'
+                              e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                          >
+                            {person.trim()}
+                          </button>
+                        ))}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -479,6 +691,7 @@ function Results() {
 
       </div>
     </div>
+    </>
   )
 }
 

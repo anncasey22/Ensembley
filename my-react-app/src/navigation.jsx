@@ -13,6 +13,9 @@ function Navigation() {
       <NavLink to="/results" className={({ isActive }) => isActive ? 'active' : ''}>
         results
       </NavLink>
+      <NavLink to="/musicians" className={({ isActive }) => isActive ? 'active' : ''}>
+        musicians
+      </NavLink>
     </nav>
   )
 }
