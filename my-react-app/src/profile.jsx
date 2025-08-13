@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
+import { Geolocation } from '@capacitor/geolocation'
+import { Capacitor } from '@capacitor/core'
 import './profile.css'
 
 const PROFILE_STORAGE_KEY = 'ensembley_profile_data'
@@ -88,6 +91,85 @@ function Profile() {
     setMediaList((prev) => prev.filter((_, index) => index !== indexToRemove))
   }
 
+  // Camera functions for mobile devices
+  const takePicture = async () => {
+    try {
+      if (!Capacitor.isNativePlatform()) {
+        alert('Camera is only available on mobile devices')
+        return
+      }
+
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Camera
+      })
+
+      if (image.dataUrl) {
+        const newMedia = {
+          url: image.dataUrl,
+          type: 'image',
+          name: `camera_photo_${Date.now()}.jpg`,
+          size: 0
+        }
+        setMediaList((prev) => [...prev, newMedia])
+      }
+    } catch (error) {
+      console.error('Error taking picture:', error)
+      alert('Failed to take picture. Please try again.')
+    }
+  }
+
+  const selectFromGallery = async () => {
+    try {
+      if (!Capacitor.isNativePlatform()) {
+        alert('Gallery access is only available on mobile devices')
+        return
+      }
+
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Photos
+      })
+
+      if (image.dataUrl) {
+        const newMedia = {
+          url: image.dataUrl,
+          type: 'image',
+          name: `gallery_photo_${Date.now()}.jpg`,
+          size: 0
+        }
+        setMediaList((prev) => [...prev, newMedia])
+      }
+    } catch (error) {
+      console.error('Error selecting from gallery:', error)
+      alert('Failed to select from gallery. Please try again.')
+    }
+  }
+
+  const getCurrentLocation = async () => {
+    try {
+      if (!Capacitor.isNativePlatform()) {
+        alert('Geolocation is only available on mobile devices')
+        return null
+      }
+
+      const position = await Geolocation.getCurrentPosition()
+      const latitude = position.coords.latitude
+      const longitude = position.coords.longitude
+      
+      console.log('Current position:', { latitude, longitude })
+      return { latitude, longitude }
+    } catch (error) {
+      console.error('Error getting location:', error)
+      alert('Failed to get location. Please check permissions.')
+      return null
+    }
+  }
+
   const handleBioSubmit = () => {
     setSubmittedBio(bio)
     setBio('')
@@ -166,6 +248,8 @@ function Profile() {
 
         <div className="profile-upload">
           <p>Upload videos or images:</p>
+          
+          {/* Desktop/Web file upload */}
           <input
             type="file"
             accept="image/*,video/*"
@@ -178,6 +262,21 @@ function Profile() {
           <label htmlFor="file-upload" className="upload-button">
             📁 Choose Files
           </label>
+
+          {/* Mobile camera buttons (only show on mobile) */}
+          {Capacitor.isNativePlatform() && (
+            <div className="camera-buttons">
+              <button onClick={takePicture} className="camera-button">
+                📷 Take Photo
+              </button>
+              <button onClick={selectFromGallery} className="camera-button">
+                🖼️ From Gallery
+              </button>
+              <button onClick={getCurrentLocation} className="camera-button">
+                📍 Get Location
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="media-preview">

@@ -167,6 +167,46 @@
   box-shadow: 0 2px 8px rgba(76,110,245,0.15);
 }
 
+/* Camera buttons for mobile */
+.camera-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.camera-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  background: linear-gradient(135deg, #4c6ef5 0%, #a0c4ff 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(76,110,245,0.12);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  min-width: 110px;
+  flex: 1;
+  max-width: 140px;
+}
+
+.camera-button:hover {
+  background: linear-gradient(135deg, #3b5bdb 0%, #8ab6ff 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(76,110,245,0.2);
+}
+
+.camera-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(76,110,245,0.12);
+}
+
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
