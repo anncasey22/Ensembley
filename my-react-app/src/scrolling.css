@@ -246,6 +246,16 @@
         position: relative; /* Remove absolute positioning */
     }
     
+    /* YouTube videos need different handling in desktop mode */
+    .video-container .video:has(iframe),
+    .video-container .video[id^="youtube-"] {
+        position: relative !important;
+        width: 800px !important;
+        height: 450px !important; /* 16:9 aspect ratio */
+        max-width: 90vw !important;
+        max-height: 80vh !important;
+    }
+    
     .action-buttons {
         position: absolute;
         right: 1rem;
