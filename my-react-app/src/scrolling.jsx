@@ -143,7 +143,7 @@ function Scrolling() {
             playerVars: {
               autoplay: 1,
               controls: 0,
-              mute: 1,
+              mute: 0, // Allow audio
               loop: 1,
               playlist: item.videoId,
               playsinline: 1,
@@ -157,7 +157,9 @@ function Scrolling() {
             },
             events: {
               onReady: (event) => {
+                // Start muted for autoplay compliance, but allow unmuting
                 event.target.mute()
+                
                 // Configure iframe for proper scaling and reduced interference
                 const iframe = event.target.getIframe()
                 if (iframe) {
@@ -187,6 +189,10 @@ function Scrolling() {
                   setTimeout(() => {
                     try {
                       event.target.playVideo()
+                      // Unmute after a short delay to allow audio
+                      setTimeout(() => {
+                        event.target.unMute()
+                      }, 500)
                     } catch (e) {
                       console.log('Autoplay blocked, will play on intersection')
                     }
@@ -229,6 +235,12 @@ function Scrolling() {
               const player = youtubePlayersRef.current[itemId]
               if (player && player.playVideo) {
                 player.playVideo()
+                // Unmute when video comes into view
+                setTimeout(() => {
+                  if (player.unMute) {
+                    player.unMute()
+                  }
+                }, 300)
               }
             }
           } else {
