@@ -66,24 +66,54 @@ html, body {
 .primary-button {
   padding: 0.75rem 1.5rem;
   font-size: clamp(0.9rem, 2.5vw, 1rem);
-  background-color: #4c6ef5;
+  background: linear-gradient(270deg, #a0c4ff, #f7b7e9, #4c6ef5, #a0c4ff, #f7b7e9);
+  background-size: 400% 400%;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+  transition: all 0.3s ease;
   min-width: 120px;
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(76,110,245,0.15);
+}
+
+/* Only apply gradient animation to buttons that aren't welcome buttons */
+.primary-button:not(.welcome-button) {
+  animation: gradientShift 3s ease infinite;
+}
+
+.primary-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.primary-button:hover::before {
+  left: 100%;
 }
 
 .primary-button:hover {
-  background-color: #3b5bdb;
-  transform: scale(1.05);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(76,110,245,0.35);
+}
+
+.primary-button:hover:not(.welcome-button) {
+  animation: gradientShift 1.5s ease infinite;
 }
 
 .primary-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  animation: none;
 }
 
 /* Mobile responsiveness */
@@ -230,7 +260,8 @@ html, body {
 }
 
 .welcome-button {
-  animation: zoomOut 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+  animation: zoomOut 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards,
+             gradientShift 3s ease infinite 1.8s;
   transform: scale(3);
   opacity: 0;
 }
@@ -280,6 +311,18 @@ html, body {
   100% {
     transform: scale(0.1);
     opacity: 0;
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 

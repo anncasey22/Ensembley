@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './profile.css'
+
+const PROFILE_STORAGE_KEY = 'ensembley_profile_data'
+const MEDIA_STORAGE_KEY = 'ensembley_media_data'
 
 function Profile() {
   const [mediaList, setMediaList] = useState([])
@@ -10,27 +13,79 @@ function Profile() {
   const [submittedBio, setSubmittedBio] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
 
-  const handleFileChange = (e) => {
+  // Load profile data from localStorage on component mount
+  useEffect(() => {
+    try {
+      const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY)
+      if (savedProfile) {
+        const profileData = JSON.parse(savedProfile)
+        setName(profileData.name || 'John Smith')
+        setAge(profileData.age || '22')
+        setInstrument(profileData.instrument || 'Piano')
+        setBio(profileData.bio || '')
+        setSubmittedBio(profileData.submittedBio || null)
+      }
+
+      const savedMedia = localStorage.getItem(MEDIA_STORAGE_KEY)
+      if (savedMedia) {
+        const mediaData = JSON.parse(savedMedia)
+        setMediaList(mediaData || [])
+      }
+    } catch (error) {
+      console.error('Error loading profile data:', error)
+    }
+  }, [])
+
+  // Save profile data to localStorage whenever it changes
+  useEffect(() => {
+    const profileData = {
+      name,
+      age,
+      instrument,
+      bio,
+      submittedBio
+    }
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profileData))
+  }, [name, age, instrument, bio, submittedBio])
+
+  // Save media data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(MEDIA_STORAGE_KEY, JSON.stringify(mediaList))
+  }, [mediaList])
+
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files)
-    const updatedMedia = files.map((file) => ({
-      url: URL.createObjectURL(file),
-      type: file.type.startsWith('image/')
-        ? 'image'
-        : file.type.startsWith('video/')
-        ? 'video'
-        : null,
-      name: file.name,
-    })).filter((item) => item.type !== null)
-    setMediaList((prev) => [...prev, ...updatedMedia])
+    
+    const processFiles = files.map(async (file) => {
+      if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+        return null
+      }
+
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          resolve({
+            url: event.target.result, // base64 data URL
+            type: file.type.startsWith('image/') ? 'image' : 'video',
+            name: file.name,
+            size: file.size
+          })
+        }
+        reader.readAsDataURL(file)
+      })
+    })
+
+    try {
+      const processedFiles = await Promise.all(processFiles)
+      const validFiles = processedFiles.filter(file => file !== null)
+      setMediaList((prev) => [...prev, ...validFiles])
+    } catch (error) {
+      console.error('Error processing files:', error)
+    }
   }
 
   const handleRemoveMedia = (indexToRemove) => {
-    setMediaList((prev) => {
-      const newList = prev.filter((_, index) => index !== indexToRemove)
-      // Clean up the object URL to prevent memory leaks
-      URL.revokeObjectURL(prev[indexToRemove].url)
-      return newList
-    })
+    setMediaList((prev) => prev.filter((_, index) => index !== indexToRemove))
   }
 
   const handleBioSubmit = () => {
@@ -116,8 +171,13 @@ function Profile() {
             accept="image/*,video/*"
             multiple
             onChange={handleFileChange}
-            className="profile-file-input"
+            className="profile-file-input-hidden"
+            id="file-upload"
+            style={{ display: 'none' }}
           />
+          <label htmlFor="file-upload" className="upload-button">
+            📁 Choose Files
+          </label>
         </div>
 
         <div className="media-preview">

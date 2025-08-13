@@ -406,7 +406,7 @@ function Results() {
         <div className="results-content">
         <div className="button-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', width: '100%', marginBottom: '1rem' }}>
           <button 
-            className="primary-button" 
+            className="primary-button ai-recommendations-button" 
             disabled={!data.length || sending} 
             onClick={sendToAgent}
             style={{ fontSize: '0.9em' }}
