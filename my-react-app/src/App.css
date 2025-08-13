@@ -1,3 +1,18 @@
+/* Global reset for seamless layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 .app-container {
   font-family: 'Inter', 'Montserrat', sans-serif;
   color : #4c6ef5;
@@ -15,7 +30,8 @@
   flex-direction: column;
   justify-content: center;  /* vertical center */
   align-items: center;  
-  transform: translateY(-5vh); 
+  /* Remove the transform that causes misalignment */
+  /* transform: translateY(-5vh); */
 }
 
 .app-header h1,
@@ -158,6 +174,114 @@
 
 .tt-chip.active {
   background: rgba(76,110,245,0.85);
+}
+
+/* Animated Background */
+.animated-background {
+  background: linear-gradient(-45deg, #F7B7E9, #FFB6C1, #DDA0DD, #B19CD9, #87CEEB, #98FB98);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  
+  /* Remove the problematic transform */
+  transform: none;
+  
+  /* Ensure full viewport coverage */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Welcome Page Animations */
+.welcome-title {
+  font-family: 'Inter', 'Montserrat', sans-serif !important;
+  font-size: clamp(1.8rem, 5vw, 2.5rem) !important;
+  color: #333 !important;
+  animation: zoomOut 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transform: scale(3);
+  opacity: 0;
+}
+
+.welcome-subtitle {
+  font-family: 'Inter', 'Montserrat', sans-serif !important;
+  color: #666 !important;
+  margin: 1rem 0 !important;
+  font-size: clamp(0.9rem, 2.5vw, 1rem) !important;
+  animation: zoomOut 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+  transform: scale(3);
+  opacity: 0;
+}
+
+.welcome-button {
+  animation: zoomOut 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+  transform: scale(3);
+  opacity: 0;
+}
+
+@keyframes zoomOut {
+  0% {
+    transform: scale(3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Page Exit Animation */
+.page-exit {
+  animation: pageZoomOut 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+}
+
+.page-exit .welcome-title,
+.page-exit .welcome-subtitle,
+.page-exit .welcome-button {
+  animation: elementZoomOut 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+}
+
+@keyframes pageZoomOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+}
+
+@keyframes elementZoomOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
 }
 
 
