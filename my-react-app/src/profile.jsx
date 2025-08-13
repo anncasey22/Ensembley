@@ -24,6 +24,15 @@ function Profile() {
     setMediaList((prev) => [...prev, ...updatedMedia])
   }
 
+  const handleRemoveMedia = (indexToRemove) => {
+    setMediaList((prev) => {
+      const newList = prev.filter((_, index) => index !== indexToRemove)
+      // Clean up the object URL to prevent memory leaks
+      URL.revokeObjectURL(prev[indexToRemove].url)
+      return newList
+    })
+  }
+
   const handleBioSubmit = () => {
     setSubmittedBio(bio)
     setBio('')
@@ -114,7 +123,16 @@ function Profile() {
         <div className="media-preview">
           {mediaList.map((media, index) => (
             <div key={index} className="media-card">
-              <p className="media-name">{media.name}</p>
+              <div className="media-header">
+                <p className="media-name">{media.name}</p>
+                <button
+                  className="remove-media-btn"
+                  onClick={() => handleRemoveMedia(index)}
+                  title="Remove this file"
+                >
+                  ❌
+                </button>
+              </div>
               {media.type === 'image' && (
                 <img
                   src={media.url}

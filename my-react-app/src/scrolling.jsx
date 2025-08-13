@@ -366,7 +366,7 @@ function Scrolling() {
       className={`tt-chip ${likedMap[gKey] ? 'active' : ''}`}
       onClick={() => record('genre', item.genre, item.id)}
       style={{ pointerEvents: 'auto', zIndex: 11 }}
-    ><FaMusic size={22} /></button>
+    >🎵</button>
     <span>Genre</span>
   </div>
   <div className="tt-chip-wrapper">
@@ -374,7 +374,7 @@ function Scrolling() {
       className={`tt-chip ${likedMap[iKey] ? 'active' : ''}`}
       onClick={() => record('instrument', item.instrument, item.id)}
       style={{ pointerEvents: 'auto', zIndex: 11 }}
-    ><FaGuitar size={22} /></button>
+    >🎸</button>
     <span>Instrument</span>
   </div>
   <div className="tt-chip-wrapper">
@@ -382,7 +382,7 @@ function Scrolling() {
       className={`tt-chip ${likedMap[aKey] ? 'active' : ''}`}
       onClick={() => record('artist', item.artist, item.id)}
       style={{ pointerEvents: 'auto', zIndex: 11 }}
-    ><FaUser size={22} /></button>
+    >👤</button>
     <span>User</span>
   </div>
 </div>
