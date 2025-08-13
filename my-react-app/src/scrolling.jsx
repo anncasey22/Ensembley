@@ -8,28 +8,90 @@ const STORAGE_KEY = 'scrolling_interactions'
 const FEED = [
   {
     id: 'item-1',
-    src: 'https://videos.pexels.com/video-files/2795733/2795733-hd_1920_1080_25fps.mp4',
+    src: 'https://videos.pexels.com/video-files/5659552/5659552-uhd_2732_1440_25fps.mp4',
     type: 'video',
-    genre: 'jazz',
-    instrument: 'guitar',
-    artist: 'Ava Martinez',
+    genre: 'rock',
+    instrument: 'drums',
+    artist: 'John Lennon ',
   },
+  
   {
     id: 'item-2',
-    src: 'https://videos.pexels.com/video-files/2795733/2795733-hd_1920_1080_25fps.mp4',
+    src: 'https://videos.pexels.com/video-files/1892490/1892490-hd_1920_1080_24fps.mp4',
     type: 'video',
     genre: 'indie',
     instrument: 'piano',
     artist: 'Noah Kim',
   },
+
+  {
+    id: 'item-4',
+    src: 'https://videos.pexels.com/video-files/2941115/2941115-uhd_2732_1440_24fps.mp4', // video of a man playing jazz trumpet on the street :contentReference[oaicite:1]{index=1}
+    type: 'video',
+    genre: 'jazz',
+    instrument: 'trumpet',
+    artist: 'Marcus Johnson',
+  },
+
   {
     id: 'item-3',
-    src: 'https://videos.pexels.com/video-files/2795733/2795733-hd_1920_1080_25fps.mp4',
+    src: 'https://videos.pexels.com/video-files/3002399/3002399-hd_1920_1080_25fps.mp4',
     type: 'video',
     genre: 'blues',
     instrument: 'drums',
     artist: 'Lia Chen',
   },
+
+  {
+    id: 'item-8',
+    src: 'https://videos.pexels.com/video-files/2306150/2306150-hd_1920_1080_30fps.mp4',
+    type: 'video',
+    genre: 'classical',
+    instrument: 'piano',
+    artist: 'Hannah Bennet',
+  },
+
+  {
+    id: 'item-7',
+    src: 'https://videos.pexels.com/video-files/2017436/2017436-hd_1920_1080_24fps.mp4',
+    type: 'video',
+    genre: 'jazz',
+    instrument: 'piano',
+    artist: 'Liam Bennet',
+  },
+
+  {
+    id: 'item-5',
+    src: 'https://videos.pexels.com/video-files/855880/855880-hd_1920_1080_25fps.mp4',
+    type: 'video',
+    genre: 'classical',
+    instrument: 'violin',
+    artist: 'Tom Martinez',
+  },
+
+  {
+    id: 'item-6',
+    src: 'https://videos.pexels.com/video-files/3326187/3326187-hd_1920_1080_24fps.mp4',
+    type: 'video',
+    genre: 'rock',
+    instrument: 'drums',
+    artist: 'Elliot Smith ',
+  },
+  {
+    id: 'item-6',
+    src: 'https://videos.pexels.com/video-files/2836275/2836275-uhd_2560_1440_24fps.mp4',
+    type: 'video',
+    genre: 'jazz',
+    instrument: 'guitar',
+    artist: 'Connor Martinez',
+  },
+
+  
+
+
+
+
+
 ]
 
 function loadInteractions() {
