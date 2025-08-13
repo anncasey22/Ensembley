@@ -13,6 +13,8 @@
   position: relative;
   z-index: 1;
   overflow-x: hidden;
+  width: 100vw;
+  margin: 0;
 }
 
 /* Header */
@@ -197,5 +199,76 @@
   .button-container {
     flex-direction: column;
     gap: 0.75rem;
+  }
+}
+
+/* Desktop responsiveness */
+@media (min-width: 769px) {
+  .results-container {
+    padding: 2rem;
+    width: 100vw;
+  }
+  
+  .results-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 2rem;
+  }
+  
+  .results-header h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1.5rem;
+  }
+  
+  .button-container {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+  
+  .primary-button {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    min-width: 160px;
+    max-width: none;
+  }
+  
+  .results-list {
+    gap: 1.5rem;
+    width: 100%;
+  }
+  
+  .result-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .results-container {
+    padding: 3rem;
+    width: 100vw;
+  }
+  
+  .results-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 2.5rem;
+  }
+  
+  .results-header h1 {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+  }
+  
+  .button-container {
+    gap: 1.5rem;
+    width: 100%;
+  }
+  
+  .primary-button {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    min-width: 180px;
   }
 }
