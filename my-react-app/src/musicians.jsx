@@ -26,7 +26,7 @@ const MUSICIANS = [
   },
   {
     id: 3,
-    name: 'Sophie Chen',
+    name: 'Liam Chen',
     age: '27',
     instrument: 'Piano, Bass',
     bio: 'Jazz pianist and bassist who also dabbles in classical composition.',
@@ -36,7 +36,7 @@ const MUSICIANS = [
   },
   {
     id: 4,
-    name: 'Liam Davis',
+    name: 'Sophie Davis',
     age: '25',
     instrument: 'Drums, Percussion',
     bio: 'Drummer and percussionist with a passion for funk, R&B, and world rhythms.',
@@ -116,7 +116,7 @@ const MUSICIANS = [
   },
   {
     id: 12,
-    name: 'Imani Jackson',
+    name: 'Maya Hernandez',
     age: '27',
     instrument: 'Vocals',
     bio: 'Soul and R&B vocalist with gospel roots, often performs with a live backing band.',
@@ -126,7 +126,7 @@ const MUSICIANS = [
   },
   {
     id: 13,
-    name: 'Ayana Brooks',
+    name: 'Julian Carter',
     age: '30',
     instrument: 'Harmonica, Slide Guitar',
     bio: 'Blues harmonica player and slide guitarist with a love for delta blues traditions.',
@@ -176,7 +176,7 @@ const MUSICIANS = [
   },
   {
     id: 18,
-    name: 'Ethan Foster',
+    name: 'Emily Foster',
     age: '28',
     instrument: 'Saxophone',
     bio: 'Jazz saxophonist who also arranges big band charts and smooth lounge sets.',
@@ -236,7 +236,7 @@ const MUSICIANS = [
   },
   {
     id: 24,
-    name: 'Aarav Sharma',
+    name: 'Priya Sharma',
     age: '27',
     instrument: 'Tabla',
     bio: 'Tabla player who fuses traditional Indian rhythms with jazz and fusion ensembles.',
@@ -246,7 +246,7 @@ const MUSICIANS = [
   },
   {
     id: 25,
-    name: 'Gabriel Hernandez',
+    name: 'Gabriel Torres',
     age: '28',
     instrument: 'Trumpet, Flugelhorn',
     bio: 'Trumpeter and flugelhorn player known for Latin jazz and salsa-inspired performances.',
@@ -266,7 +266,7 @@ const MUSICIANS = [
   },
   {
     id: 27,
-    name: 'Clara Bennett',
+    name: 'Owen Bennett',
     age: '31',
     instrument: 'Mandolin',
     bio: 'Bluegrass mandolinist with roots in Appalachian folk traditions.',
@@ -286,7 +286,7 @@ const MUSICIANS = [
   },
   {
     id: 29,
-    name: 'Adriana Wu',
+    name: 'Adrian Wu',
     age: '26',
     instrument: 'Experimental Percussion',
     bio: 'Experimental percussionist exploring found-object instruments and rhythmic looping.',
@@ -294,6 +294,16 @@ const MUSICIANS = [
     profileImage: null,
     videoId: 'cRkr6-amhzI' // Experimental Percussion
   },
+  {
+    id: 30,
+    name: 'Hannah Brooks',
+    age: '25',
+    instrument: 'Vocals, Acoustic Guitar',
+    bio: 'Country vocalist and acoustic guitarist inspired by 90s Nashville sound.',
+    genres: ['country', 'acoustic'],
+    profileImage: null,
+    videoId: 'udrFVfObP6Y' // Country Vocals
+  }
 ]
 
 function MusicianProfile({ musician }) {
